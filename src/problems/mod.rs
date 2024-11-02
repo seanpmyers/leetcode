@@ -3,6 +3,7 @@ pub mod p121;
 pub mod p217;
 pub mod p242;
 pub mod p3;
+pub mod p347;
 pub mod p424;
 pub mod p49;
 pub mod p74;
