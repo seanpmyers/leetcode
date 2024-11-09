@@ -15,5 +15,6 @@ pub mod p3;
 pub mod p347;
 pub mod p424;
 pub mod p49;
+pub mod p543;
 pub mod p74;
 pub mod p875;
