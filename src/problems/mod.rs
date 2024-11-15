@@ -27,5 +27,6 @@ pub mod p371;
 pub mod p424;
 pub mod p49;
 pub mod p543;
+pub mod p66;
 pub mod p74;
 pub mod p875;
