@@ -23,6 +23,7 @@ pub mod p268;
 pub mod p3;
 pub mod p338;
 pub mod p347;
+pub mod p36;
 pub mod p371;
 pub mod p424;
 pub mod p49;
