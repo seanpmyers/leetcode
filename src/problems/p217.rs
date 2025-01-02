@@ -1,3 +1,4 @@
+// #arrays #hashing
 pub struct Solution {}
 use std::collections::HashSet;
 impl Solution {
