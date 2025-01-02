@@ -5,27 +5,15 @@ impl Solution {
         if n <= 1 {
             return n as i32;
         }
-        let mut result: i32 = n as i32;
-        let mut stack: Vec<(i32, i32)> = Vec::with_capacity(n);
-        for i in 0..n {
-            let mut fleet: i32 = 0;
-            let (mut p, mut s): (i32, i32) = (position[i], speed[i]);
-            while !stack.is_empty() {
-                if let Some(top) = stack.pop() {
-                    let t_update = top.0 + top.1;
-                    if t_update == target {
-                        fleet += 1;
-                        if p + s == target {
-                            fleet += 1;
-                            continue;
-                        } else {
-                            p += s;
-                        }
-                    }
-                }
+        let mut values: Vec<(i32, i32)> = position.into_iter().zip(speed).collect();
+        values.sort_by(|x, y| y.0.cmp(&x.0));
+        let mut stack: Vec<f32> = vec![];
+        for (p, s) in values.into_iter() {
+            stack.push((target - p) as f32 / s as f32);
+            if stack.len() >= 2 && stack[stack.len() - 1] <= stack[stack.len() - 2] {
+                stack.pop();
             }
-            stack.push((p, s));
         }
-        result
+        stack.len() as i32
     }
 }
