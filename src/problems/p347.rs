@@ -23,4 +23,21 @@ impl Solution {
         }
         heap.into_iter().map(|x| x.1).collect::<Vec<i32>>()
     }
+
+    pub fn top_k_frequent_alternate(nums: Vec<i32>, k: i32) -> Vec<i32> {
+        use std::collections::{BinaryHeap, HashMap};
+        let mut result: Vec<i32> = vec![];
+        let mut map: HashMap<i32, u16> = HashMap::with_capacity(nums.len());
+        let mut heap: BinaryHeap<(u16, i32)> = BinaryHeap::with_capacity(nums.len());
+        nums.into_iter().for_each(|n| {
+            map.entry(n).and_modify(|x| *x += 1).or_insert(1);
+        });
+        for (k, v) in map.into_iter() {
+            heap.push((v, k));
+        }
+        for _ in 0..k {
+            result.push(heap.pop().unwrap().1);
+        }
+        result
+    }
 }
