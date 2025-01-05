@@ -1,12 +1,12 @@
 pub struct Solution {}
 impl Solution {
     pub fn is_palindrome(s: String) -> bool {
-        const LOWER_A: u8 = b'a' as u8;
-        const LOWER_Z: u8 = b'z' as u8;
-        const UPPER_A: u8 = b'A' as u8;
-        const UPPER_Z: u8 = b'Z' as u8;
-        const ZERO: u8 = b'0' as u8;
-        const NINE: u8 = b'9' as u8;
+        const LOWER_A: u8 = b'a';
+        const LOWER_Z: u8 = b'z';
+        const UPPER_A: u8 = b'A';
+        const UPPER_Z: u8 = b'Z';
+        const ZERO: u8 = b'0';
+        const NINE: u8 = b'9';
         pub fn is_valid_char(c: u8) -> bool {
             c >= LOWER_A && c <= LOWER_Z || c >= UPPER_A && c <= UPPER_Z || c >= ZERO && c <= NINE
         }
