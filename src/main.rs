@@ -6,6 +6,126 @@ fn main() {
 
 pub struct Solution;
 impl Solution {
+    pub fn trap(height: Vec<i32>) -> i32 {
+        if height.is_empty() {
+            return 0;
+        }
+        let mut result: i32 = 0i32;
+        let mut l: usize = 0;
+        let mut r: usize = height.len() - 1;
+        let mut l_max: i32 = height[l];
+        let mut r_max: i32 = height[r];
+
+        while l < r {
+            if l_max < r_max {
+                l += 1;
+                let left = height[l];
+                l_max = l_max.max(left);
+                result += l_max - left;
+                continue;
+            }
+            r -= 1;
+            let right = height[r];
+            r_max = r_max.max(right);
+            result += r_max - right;
+        }
+        result
+    }
+    pub fn max_area(height: Vec<i32>) -> i32 {
+        let mut result: i32 = 0;
+        let mut l: usize = 0;
+        let mut r: usize = height.len() - 1;
+        while l < r {
+            let left: i32 = height[l];
+            let right: i32 = height[r];
+            let h = left.min(right);
+            let w = r - l;
+            result = result.max(h * w as i32);
+            if left < right {
+                l += 1;
+                continue;
+            }
+            r -= 1;
+        }
+        result
+    }
+    pub fn is_valid(s: String) -> bool {
+        let mut stack: Vec<char> = Vec::with_capacity(s.len());
+        for c in s.chars() {
+            match c {
+                '(' => stack.push(c),
+                '[' => stack.push(c),
+                '{' => stack.push(c),
+                '}' => match stack.pop() {
+                    Some('{') => {}
+                    _ => return false,
+                },
+                ')' => match stack.pop() {
+                    Some('(') => {}
+                    _ => return false,
+                },
+                ']' => match stack.pop() {
+                    Some('[') => {}
+                    _ => return false,
+                },
+                _ => panic!("Invalid input"),
+            }
+        }
+        stack.is_empty()
+    }
+
+    pub fn three_sum(nums: Vec<i32>) -> Vec<Vec<i32>> {
+        use std::collections::HashSet;
+        let mut result: HashSet<Vec<i32>> = HashSet::new();
+
+        for i in 0..nums.len() {
+            let mut l: usize = i + 1;
+            let mut r: usize = nums.len() - 1;
+            while l < r {
+                match (nums[i] + nums[l] + nums[r]).cmp(&0) {
+                    std::cmp::Ordering::Less => l += 1,
+                    std::cmp::Ordering::Equal => {
+                        result.insert(vec![nums[i], nums[l], nums[r]]);
+                        l += 1;
+                        r -= 1;
+                        while l < r && nums[l] == nums[l - 1] {
+                            l += 1;
+                        }
+                    }
+                    std::cmp::Ordering::Greater => r -= 1,
+                }
+            }
+        }
+
+        result.into_iter().collect()
+    }
+
+    pub fn two_sum_2(numbers: Vec<i32>, target: i32) -> Vec<i32> {
+        //array is sorted
+        pub fn middle(s: usize, e: usize) -> usize {
+            s + (e - s) / 2
+        }
+        let (mut l, mut r): (usize, usize) = (0, numbers.len() - 1);
+        while l < r {
+            let middle: usize = middle(l, r);
+            match target.cmp(&(numbers[l] + numbers[r])) {
+                std::cmp::Ordering::Equal => return vec![l as i32 + 1, r as i32 + 1],
+                std::cmp::Ordering::Greater => {
+                    l = match numbers[middle] + numbers[r] < target {
+                        true => middle + 1,
+                        false => l + 1,
+                    }
+                }
+                std::cmp::Ordering::Less => {
+                    r = match numbers[middle] + numbers[l] > target {
+                        true => middle - 1,
+                        false => r - 1,
+                    }
+                }
+            }
+        }
+        vec![0, 0]
+    }
     pub fn is_palindrome(s: String) -> bool {
         const LOWER_A: u8 = b'a' as u8;
         const LOWER_Z: u8 = b'z' as u8;
