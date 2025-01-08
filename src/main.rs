@@ -3,9 +3,54 @@ pub mod problems;
 fn main() {
     println!("Leetcode");
 }
+use std::cell::RefCell;
+use std::rc::Rc;
+#[derive(Debug, PartialEq, Eq)]
+pub struct TreeNode {
+    pub val: i32,
+    pub left: Option<Rc<RefCell<TreeNode>>>,
+    pub right: Option<Rc<RefCell<TreeNode>>>,
+}
 
+impl TreeNode {
+    #[inline]
+    pub fn new(val: i32) -> Self {
+        TreeNode {
+            val,
+            left: None,
+            right: None,
+        }
+    }
+}
 pub struct Solution;
 impl Solution {
+    pub fn single_number(nums: Vec<i32>) -> i32 {
+        nums.into_iter().fold(0, |acc, x| acc ^ x)
+    }
+
+    pub fn invert_tree(mut root: Option<Rc<RefCell<TreeNode>>>) -> Option<Rc<RefCell<TreeNode>>> {
+        let mut stack: Vec<Rc<RefCell<TreeNode>>> = Vec::new();
+        if let Some(node) = root {
+            stack.push(node.clone());
+            root = Some(node);
+        }
+
+        while let Some(node) = stack.pop() {
+            let mut node_ref = node.borrow_mut();
+            let temp = node_ref.left.take();
+            node_ref.left = node_ref.right.take();
+            node_ref.right = temp;
+            if let Some(l) = node_ref.left.clone() {
+                stack.push(l);
+            }
+            if let Some(r) = node_ref.right.clone() {
+                stack.push(r);
+            }
+        }
+
+        root
+    }
+
     pub fn trap(height: Vec<i32>) -> i32 {
         if height.is_empty() {
             return 0;
