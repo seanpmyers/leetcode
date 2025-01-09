@@ -24,6 +24,108 @@ impl TreeNode {
 }
 pub struct Solution;
 impl Solution {
+    pub fn good_nodes(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+        let mut count: i32 = 0;
+        match root {
+            Some(r) => {
+                pub fn recurse(count: &mut i32, node: Rc<RefCell<TreeNode>>, max: i32) {
+                    if node.borrow().val >= max {
+                        *count += 1;
+                    }
+                    let max = max.max(node.borrow().val);
+                    match node.borrow_mut().left.take() {
+                        Some(l) => recurse(count, l, max),
+                        None => {}
+                    }
+                    match node.borrow_mut().right.take() {
+                        Some(r) => recurse(count, r, max),
+                        None => {}
+                    }
+                }
+                let max: i32 = r.borrow().val;
+                recurse(&mut count, r, max);
+            }
+            None => {}
+        }
+        count
+    }
+    pub fn max_depth(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+        let mut max: i32 = 0;
+        match root {
+            Some(r) => {
+                let mut stack: Vec<(Rc<RefCell<TreeNode>>, i32)> = vec![(r, 1)];
+                while let Some((n, depth)) = stack.pop() {
+                    max = max.max(depth);
+                    match n.as_ref().borrow_mut().left.take() {
+                        Some(l) => stack.push((l, depth + 1)),
+                        None => {}
+                    }
+                    match n.as_ref().borrow_mut().right.take() {
+                        Some(r) => stack.push((r, depth + 1)),
+                        None => {}
+                    }
+                }
+            }
+            None => return max,
+        }
+        max
+    }
+    pub fn is_same_tree(
+        p: Option<Rc<RefCell<TreeNode>>>,
+        q: Option<Rc<RefCell<TreeNode>>>,
+    ) -> bool {
+        let mut stack: Vec<(Option<Rc<RefCell<TreeNode>>>, Option<Rc<RefCell<TreeNode>>>)> =
+            vec![(p, q)];
+
+        while let Some((l, r)) = stack.pop() {
+            match (l, r) {
+                (None, None) => continue,
+                (None, Some(_)) => return false,
+                (Some(_), None) => return false,
+                (Some(x), Some(y)) => {
+                    if x.as_ref().borrow().val != y.as_ref().borrow().val {
+                        return false;
+                    }
+                    stack.push((
+                        x.as_ref().borrow_mut().left.take(),
+                        y.as_ref().borrow_mut().left.take(),
+                    ));
+                    stack.push((
+                        x.as_ref().borrow_mut().right.take(),
+                        y.as_ref().borrow_mut().right.take(),
+                    ));
+                }
+            }
+        }
+        true
+    }
+    pub fn daily_temperatures(temperatures: Vec<i32>) -> Vec<i32> {
+        let mut stack: Vec<(i32, usize)> = Vec::with_capacity(temperatures.len());
+        let mut result: Vec<i32> = vec![0; temperatures.len()];
+        for (i, t) in temperatures.into_iter().enumerate() {
+            while !stack.is_empty() && stack[stack.len() - 1].0 < t {
+                let top = stack.pop().unwrap();
+                result[top.1] = (i - top.1) as i32;
+            }
+            stack.push((t, i));
+        }
+        result
+    }
+    pub fn car_fleet(target: i32, position: Vec<i32>, speed: Vec<i32>) -> i32 {
+        let mut fleets: i32 = 1;
+        let mut ps: Vec<(i32, i32)> = position.into_iter().zip(speed).collect();
+        ps.sort_unstable_by(|x, y| y.0.cmp(&x.0));
+        let mut previous = (target - ps[0].0) as f64 / ps[0].1 as f64;
+        for (p, s) in ps.into_iter().skip(1) {
+            let current = (target - p) as f64 / s as f64;
+            if previous < current {
+                fleets += 1;
+                previous = current;
+            }
+        }
+
+        fleets
+    }
     pub fn single_number(nums: Vec<i32>) -> i32 {
         nums.into_iter().fold(0, |acc, x| acc ^ x)
     }
