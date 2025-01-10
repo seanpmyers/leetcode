@@ -24,6 +24,40 @@ impl TreeNode {
 }
 pub struct Solution;
 impl Solution {
+    pub fn character_replacement(s: String, k: i32) -> i32 {
+        if s.is_empty() {
+            return 0;
+        }
+        use std::collections::HashMap;
+        let mut map: HashMap<u8, i32> = HashMap::new();
+        let s: Vec<u8> = s.into_bytes();
+        let mut result: i32 = 0;
+        let mut max: i32 = 0;
+        let length: usize = s.len();
+        let mut l: usize = 0;
+        for i in 0..s.len() {
+            let count = map.entry(s[i]).and_modify(|x| *x += 1i32).or_insert(1i32);
+            max = max.max(*count);
+            while (i - l + 1) as i32 - max > k {
+                map.entry(s[l]).and_modify(|x| *x -= 1);
+                l += 1;
+            }
+            result = result.max((i - l + 1) as i32);
+        }
+        result.min(length as i32)
+    }
+    pub fn max_profit(prices: Vec<i32>) -> i32 {
+        if prices.is_empty() {
+            return 0;
+        }
+        let mut profit: i32 = 0;
+        let mut min: i32 = prices[0];
+        for p in prices.into_iter().skip(1) {
+            profit = profit.max(p - min);
+            min = min.min(p);
+        }
+        profit
+    }
     pub fn is_valid_bst(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
         match root {
             Some(r) => {
