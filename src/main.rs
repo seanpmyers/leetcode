@@ -22,8 +22,123 @@ impl TreeNode {
         }
     }
 }
+#[derive(PartialEq, Eq, Clone, Debug)]
+pub struct ListNode {
+    pub val: i32,
+    pub next: Option<Box<ListNode>>,
+}
+
+impl ListNode {
+    #[inline]
+    #[allow(dead_code)]
+    fn new(val: i32) -> Self {
+        ListNode { next: None, val }
+    }
+}
 pub struct Solution;
 impl Solution {
+    pub fn find_duplicate(nums: Vec<i32>) -> i32 {
+        if nums.len() == 2 {
+            return nums[0];
+        }
+        let mut slow: usize = 0;
+        let mut fast: usize = 0;
+        loop {
+            slow = nums[slow] as usize;
+            fast = nums[nums[fast] as usize] as usize;
+            if slow == fast {
+                break;
+            }
+        }
+        let mut slow2: usize = 0;
+        loop {
+            slow = nums[slow] as usize;
+            slow2 = nums[slow2] as usize;
+            if slow == slow2 {
+                return slow as i32;
+            }
+        }
+    }
+
+    pub fn add_two_numbers(
+        mut l1: Option<Box<ListNode>>,
+        mut l2: Option<Box<ListNode>>,
+    ) -> Option<Box<ListNode>> {
+        let mut result: ListNode = ListNode::new(0i32);
+        let mut current = &mut result;
+        let mut carry: i32 = 0;
+        pub fn digit_calc(digit: &mut i32, carry: &mut i32) {
+            *carry = *digit / 10;
+            *digit = *digit % 10;
+        }
+        while l1.is_some() || l2.is_some() {
+            match (l1.clone(), l2.clone()) {
+                (None, None) => {}
+                (None, Some(l2_n)) => {
+                    let next = l2_n.next.clone();
+                    let mut digit = carry + l2_n.val;
+                    digit_calc(&mut digit, &mut carry);
+                    let new_node = Box::new(ListNode::new(digit));
+                    current.next = Some(new_node);
+                    current = current.next.as_mut().unwrap();
+                    l2 = next;
+                }
+                (Some(l1_n), None) => {
+                    let next = l1_n.next.clone();
+                    let mut digit = carry + l1_n.val;
+                    digit_calc(&mut digit, &mut carry);
+                    let new_node = Box::new(ListNode::new(digit));
+                    current.next = Some(new_node);
+                    current = current.next.as_mut().unwrap();
+                    l1 = next;
+                }
+                (Some(l1_n), Some(l2_n)) => {
+                    let next_1 = l1_n.next.clone();
+                    let next_2 = l2_n.next.clone();
+                    let mut digit = carry + l1_n.val + l2_n.val;
+                    digit_calc(&mut digit, &mut carry);
+                    let new_node = Box::new(ListNode::new(digit));
+                    current.next = Some(new_node);
+                    current = current.next.as_mut().unwrap();
+                    l1 = next_1;
+                    l2 = next_2;
+                }
+            }
+        }
+        if carry != 0 {
+            let mut digit = 0 + carry;
+            digit_calc(&mut digit, &mut carry);
+            let new_node = Box::new(ListNode::new(digit));
+            current.next = Some(new_node);
+            _ = current.next.as_mut().unwrap();
+        }
+
+        result.next
+    }
+    pub fn is_happy(n: i32) -> bool {
+        if n == 1 {
+            return true;
+        }
+        pub fn process_digits(mut n: i32) -> i32 {
+            let mut result: i32 = 0;
+            while n != 0 {
+                result += (n % 10).pow(2);
+                n /= 10;
+            }
+            result
+        }
+        use std::collections::HashSet;
+        let mut set: HashSet<i32> = HashSet::new();
+        let mut happy: i32 = n;
+        while happy != 1 {
+            let current: i32 = process_digits(happy);
+            if !set.insert(current) {
+                return false;
+            }
+            happy = current;
+        }
+        true
+    }
     pub fn character_replacement(s: String, k: i32) -> i32 {
         if s.is_empty() {
             return 0;
