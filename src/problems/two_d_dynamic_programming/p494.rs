@@ -25,7 +25,7 @@ pub fn backtrack(i: usize, sum: i32, result: &mut i32, nums: &Vec<i32>, target: 
 
 #[cfg(test)]
 mod tests {
-    use crate::problems::p494::Solution;
+    use crate::problems::two_d_dynamic_programming::p494::Solution;
 
     const NUMS_BASIC: [i32; 5] = [1i32, 1i32, 1i32, 1i32, 1i32];
 
