@@ -10,6 +10,7 @@ pub mod intervals;
 pub mod linked_list;
 pub mod math_and_geometry;
 pub mod one_d_dynamic_programming;
+pub mod p1267;
 pub mod sliding_window;
 pub mod stack;
 pub mod trees;
