@@ -1,31 +1,22 @@
 pub struct Solution {}
 impl Solution {
     pub fn character_replacement(s: String, k: i32) -> i32 {
-        if k == s.len() as i32 {
-            return k;
-        }
-        let mut result: i32 = 1;
-        let chars: Vec<char> = s.chars().collect();
-        let mut s: usize = 0;
-        let mut e: usize = 0;
-        let mut current: i32 = k;
-        while e < chars.len() {
-            if chars[e] != chars[s] {
-                if current > 0 {
-                    current -= 1;
-                    e += 1;
-                    continue;
-                }
-                current = k;
-                result = result.max(chars[s..e].len() as i32);
-                println!("{} {} {:?}", s, e, chars[s..e].to_vec());
-                s += 1;
-                e = s + 1;
-                continue;
+        use std::collections::HashMap;
+        let mut max: i32 = 0i32;
+        let bytes: &[u8] = s.as_bytes();
+        let mut l: usize = 0;
+        let mut max_f: i32 = 0;
+        let mut map: HashMap<u8, i32> = HashMap::with_capacity(26usize);
+        for r in 0..bytes.len() {
+            let entry: &mut i32 = map.entry(bytes[r]).and_modify(|x| *x += 1).or_insert(1i32);
+            max_f = max_f.max(*entry);
+            while (r as i32 - l as i32 + 1i32) - max_f > k {
+                map.entry(bytes[l]).and_modify(|x| *x -= 1);
+                l = l.saturating_add(1);
             }
-            e += 1;
+            max = max.max(r as i32 - l as i32 + 1i32);
         }
 
-        result.max(chars[s..e].len() as i32)
+        max
     }
 }
