@@ -29,4 +29,41 @@ impl Solution {
 
         result
     }
+    pub fn queue(nums: Vec<i32>, k: i32) -> Vec<i32> {
+        if k == 1 {
+            return nums;
+        }
+
+        let k: usize = k as usize;
+        let mut result: Vec<i32> = Vec::new();
+        use std::collections::VecDeque;
+        let mut queue: VecDeque<i32> = VecDeque::new();
+
+        for r in 0..nums.len() {
+            while let Some(back) = queue.back() {
+                if *back >= nums[r] {
+                    break;
+                }
+                queue.pop_back();
+            }
+
+            queue.push_back(nums[r]);
+
+            if r >= k {
+                if let Some(front) = queue.front() {
+                    if nums[r - k] == *front {
+                        queue.pop_front();
+                    }
+                }
+            }
+
+            if r >= k - 1 {
+                if let Some(front) = queue.front() {
+                    result.push(*front);
+                }
+            }
+        }
+
+        result
+    }
 }
