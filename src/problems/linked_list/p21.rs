@@ -16,13 +16,18 @@ impl Solution {
         mut list1: Option<Box<ListNode>>,
         mut list2: Option<Box<ListNode>>,
     ) -> Option<Box<ListNode>> {
-        let mut r = &mut list1;
+        let mut result: &mut Option<Box<ListNode>> = &mut list1;
 
         while list2.is_some() {
-            if r.is_none() || list2.as_mut()?.val < r.as_mut()?.val {
-                std::mem::swap(&mut list2, r);
+            if result.as_ref().is_none()
+                || result
+                    .as_ref()
+                    .is_some_and(|x| list2.as_ref().is_some_and(|y| y.val < x.val))
+            {
+                std::mem::swap(result, &mut list2);
             }
-            r = &mut r.as_mut()?.next;
+
+            result = &mut result.as_mut()?.next;
         }
 
         list1
