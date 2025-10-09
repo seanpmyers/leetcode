@@ -14,27 +14,31 @@ impl ListNode {
 pub struct Solution {}
 impl Solution {
     pub fn reorder_list(head: &mut Option<Box<ListNode>>) {
-        use std::collections::VecDeque;
-        let mut list: VecDeque<Box<ListNode>> = VecDeque::new();
-        let mut next: Option<Box<ListNode>> = head.take();
-        while let Some(mut node) = next {
-            next = node.next.take();
-            list.push_back(node);
-        }
+        if let Some(node) = head.as_mut() {
+            use std::collections::VecDeque;
+            let mut current: Option<Box<ListNode>> = node.next.take();
+            let result: &mut Box<ListNode> = node;
+            let mut nodes: VecDeque<Box<ListNode>> = VecDeque::new();
+            let mut list: &mut ListNode = &mut result.as_mut();
 
-        let mut dummy_head = ListNode::new(0);
-        let mut iter = &mut dummy_head;
-        let mut front: bool = true;
-        while !list.is_empty() {
-            iter.next = if front {
-                list.pop_front()
-            } else {
-                list.pop_back()
-            };
-            front = !front;
-            iter = iter.next.as_mut().unwrap();
-        }
+            while let Some(mut n) = current {
+                let temp = n.next.take();
+                nodes.push_back(n);
+                current = temp;
+            }
 
-        *head = dummy_head.next;
+            while !nodes.is_empty() {
+                if let Some(back) = nodes.pop_back() {
+                    list.next = Some(back);
+                    list = list.next.as_mut().unwrap();
+                };
+                if let Some(front) = nodes.pop_front() {
+                    list.next = Some(front);
+                    list = list.next.as_mut().unwrap();
+                };
+            }
+
+            *head = Some(result.to_owned());
+        }
     }
 }
