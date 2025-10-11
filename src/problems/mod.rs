@@ -17,3 +17,4 @@ pub mod trees;
 pub mod tries;
 pub mod two_d_dynamic_programming;
 pub mod two_pointers;
+pub mod uncategorized {}
