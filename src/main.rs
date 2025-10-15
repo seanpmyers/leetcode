@@ -1,8 +1,5 @@
 pub mod problems;
 
-fn main() {
-    println!("Leetcode");
-}
 use std::cell::RefCell;
 use std::rc::Rc;
 #[derive(Debug, PartialEq, Eq)]
@@ -35,5 +32,10 @@ impl ListNode {
         ListNode { next: None, val }
     }
 }
+
+fn main() {
+    println!("Leetcode");
+}
+
 pub struct Solution;
 impl Solution {}
