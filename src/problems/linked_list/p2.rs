@@ -69,3 +69,57 @@ impl Solution {
         result.next
     }
 }
+
+impl Solution {
+    pub fn add_two_numbers_2(
+        mut l1: Option<Box<ListNode>>,
+        mut l2: Option<Box<ListNode>>,
+    ) -> Option<Box<ListNode>> {
+        let mut number = Vec::new();
+        let mut carry: i32 = 0;
+
+        while l1.is_some() || l2.is_some() {
+            let mut z: i32 = 0i32;
+            if let Some(mut x) = l1 {
+                z = z.saturating_add(x.val as i32);
+                l1 = x.next.take();
+            }
+            if let Some(mut y) = l2 {
+                z = z.saturating_add(y.val as i32);
+                l2 = y.next.take();
+            }
+
+            z += carry;
+            carry = 0;
+            if z >= 10 {
+                carry += 1;
+                z = z % 10;
+            }
+            number.push(z);
+        }
+
+        if carry > 0 {
+            number.push(1);
+        }
+
+        let mut result = None;
+        if number.len() == 1 && number[0] == 0 {
+            return Some(Box::new(ListNode {
+                val: 0i32,
+                next: None,
+            }));
+        }
+
+        while let Some(val) = number.pop() {
+            result = match result {
+                Some(node) => Some(Box::new(ListNode {
+                    val,
+                    next: Some(node),
+                })),
+                None => Some(Box::new(ListNode { val, next: None })),
+            };
+        }
+
+        result
+    }
+}
