@@ -20,36 +20,37 @@ impl TreeNode {
 pub struct Solution;
 impl Solution {
     pub fn is_valid_bst(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
-        match root {
-            Some(r) => {
-                pub fn dive(n: Rc<RefCell<TreeNode>>, max: Option<i32>, min: Option<i32>) -> bool {
-                    let n_val = n.as_ref().borrow().val;
-                    if let Some(l) = min {
-                        if n_val <= l {
-                            return false;
-                        }
-                    }
-                    if let Some(r) = max {
-                        if n_val >= r {
-                            return false;
-                        }
-                    }
+        let Some(root) = root else {
+            return true;
+        };
 
-                    if let Some(l) = n.as_ref().borrow().left.clone() {
-                        if !dive(l, Some(n_val), min) {
-                            return false;
-                        }
-                    }
-                    if let Some(r) = n.as_ref().borrow().right.clone() {
-                        if !dive(r, max, Some(n_val)) {
-                            return false;
-                        }
-                    }
-                    true
-                }
-                dive(r, None, None)
+        use std::collections::VecDeque;
+
+        let mut queue: VecDeque<(Rc<RefCell<TreeNode>>, Option<i32>, Option<i32>)> =
+            VecDeque::with_capacity(10usize.pow(4u32));
+
+        queue.push_back((root.clone(), None, None));
+
+        while let Some((node, min, max)) = queue.pop_front() {
+            let n_value = node.borrow().val;
+
+            if min.is_some_and(|m| n_value <= m) {
+                return false;
             }
-            None => true,
+
+            if max.is_some_and(|m| n_value >= m) {
+                return false;
+            }
+
+            if let Some(left) = node.borrow().left.clone() {
+                queue.push_back((left, min, Some(n_value)));
+            }
+
+            if let Some(right) = node.borrow().right.clone() {
+                queue.push_back((right, Some(n_value), max));
+            }
         }
+
+        true
     }
 }
