@@ -1,3 +1,23 @@
+pub mod greedy_clean {
+    pub struct Solution;
+    impl Solution {
+        pub fn can_jump(nums: Vec<i32>) -> bool {
+            if nums.len() == 1 {
+                return true;
+            }
+
+            let mut goal: usize = nums.len() - 1;
+
+            for i in (0usize..=nums.len().saturating_sub(2)).rev() {
+                if i.saturating_add(nums[i] as usize) >= goal {
+                    goal = i;
+                }
+            }
+
+            goal.eq(&0usize)
+        }
+    }
+}
 pub mod greedy {
     pub struct Solution;
     impl Solution {
