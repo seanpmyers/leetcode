@@ -1,3 +1,21 @@
+pub mod math {
+    pub struct Solution;
+    impl Solution {
+        pub fn least_interval(tasks: Vec<char>, n: i32) -> i32 {
+            let mut count: [i32; 26usize] = [0i32; 26usize];
+
+            for task in tasks.iter() {
+                count[(*task as u8 - b'A') as usize] += 1;
+            }
+
+            let max: i32 = *count.iter().max().unwrap_or(&0);
+            let max_count: i32 = count.iter().filter(|x| **x == max).count() as i32;
+
+            let time = max.saturating_sub(1) * n.saturating_add(1) + max_count;
+            (tasks.len() as i32).max(time)
+        }
+    }
+}
 pub mod better {
     pub struct Solution;
     use std::collections::{BinaryHeap, HashMap, VecDeque};
@@ -41,6 +59,7 @@ pub mod better {
         }
     }
 }
+
 pub mod linear_time {
     pub struct Solution;
     use std::collections::{BinaryHeap, HashMap};
