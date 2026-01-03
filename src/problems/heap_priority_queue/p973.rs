@@ -11,7 +11,6 @@ pub mod n_log_n {
                 let y = point[1];
 
                 let distance = Self::distance((0i32, 0i32), (x, y));
-                println!("{:?} {:?}", distance, (x, y));
                 heap.push((std::cmp::Reverse(distance as i32), (x, y)));
             }
 
