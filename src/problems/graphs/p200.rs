@@ -25,28 +25,24 @@ impl Solution {
     pub fn bfs(grid: &mut Vec<Vec<char>>, (row, column): (usize, usize)) {
         let rows: usize = grid.len();
         let columns: usize = grid[0].len();
+
         let mut queue: VecDeque<(usize, usize)> = VecDeque::new();
-        let directions: Vec<(i32, i32)> = vec![(-1, 0), (1, 0), (0, -1), (0, 1)];
+        let directions: Vec<(isize, isize)> = vec![(-1, 0), (1, 0), (0, -1), (0, 1)];
 
         queue.push_back((row, column));
 
         while let Some((row, column)) = queue.pop_front() {
-            for (r, c) in directions.iter() {
-                let (x, y): (i32, i32) = (
-                    (row as i32).saturating_add(*r),
-                    (column as i32).saturating_add(*c),
-                );
-                if x < 0
-                    || y < 0
-                    || x >= rows as i32
-                    || y >= columns as i32
-                    || grid[x as usize][y as usize] == '0'
+            for (dr, dc) in directions.iter() {
+                if let (Some(r), Some(c)) =
+                    (row.checked_add_signed(*dr), column.checked_add_signed(*dc))
                 {
-                    continue;
-                }
+                    if r >= rows || c >= columns || grid[r][c] == '0' {
+                        continue;
+                    }
 
-                grid[x as usize][y as usize] = '0';
-                queue.push_back((x as usize, y as usize));
+                    grid[r][c] = '0';
+                    queue.push_back((r, c));
+                }
             }
         }
     }
