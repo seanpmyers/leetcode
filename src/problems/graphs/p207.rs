@@ -2,7 +2,7 @@ pub mod optimized {
     pub struct Solution {}
     use std::collections::{HashMap, HashSet, VecDeque};
     impl Solution {
-        pub fn can_finish(num_courses: i32, mut prerequisites: Vec<Vec<i32>>) -> bool {
+        pub fn can_finish(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> bool {
             let rows = prerequisites.len();
 
             let mut map: HashMap<i32, Vec<i32>> = HashMap::new();
