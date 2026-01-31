@@ -1,3 +1,57 @@
+pub mod manacher {
+    pub struct Solution;
+    impl Solution {
+        pub fn longest_palindrome(s: String) -> String {
+            if s.is_empty() {
+                return s;
+            }
+
+            Self::manacher(s.as_bytes())
+        }
+
+        pub fn manacher(bytes: &[u8]) -> String {
+            let mut t: Vec<u8> = Vec::with_capacity(bytes.len() * 2 + 1);
+            t.push(b'#');
+            for i in 0..bytes.len() {
+                t.push(bytes[i]);
+                t.push(b'#');
+            }
+
+            let n: usize = t.len();
+            let mut p: Vec<usize> = vec![0usize; n];
+            let (mut l, mut r): (usize, usize) = (0, 0);
+            let (mut max, mut max_l, mut max_r): (usize, usize, usize) = (0, 0, 0);
+            for i in 0..n {
+                if i < r {
+                    p[i] = (r - i).min(p[l + (r - i)]);
+                }
+
+                while i + p[i] + 1 < n && i >= p[i] + 1 && t[i + p[i] + 1] == t[i - p[i] - 1] {
+                    p[i] += 1;
+                }
+
+                if i + p[i] > r {
+                    l = i - p[i];
+                    r = i + p[i];
+                }
+                if p[i] > max {
+                    max = p[i];
+                    max_l = l;
+                    max_r = r;
+                }
+            }
+
+            String::from_utf8(
+                (&t[max_l..max_r])
+                    .iter()
+                    .filter(|x| **x != b'#')
+                    .map(|x| *x)
+                    .collect::<Vec<u8>>(),
+            )
+            .unwrap()
+        }
+    }
+}
 pub mod cubic {
     pub struct Solution;
     impl Solution {
