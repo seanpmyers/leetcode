@@ -18,6 +18,9 @@ pub mod dp_dfs {
             word_dict: &HashSet<&[u8]>,
             memory: &mut HashMap<usize, bool>,
         ) -> bool {
+            if i >= bytes.len() {
+                return true;
+            }
             if let Some(memo) = memory.get(&i) {
                 return *memo;
             }
