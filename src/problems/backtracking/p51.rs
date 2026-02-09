@@ -1,5 +1,4 @@
 pub struct Solution;
-
 use std::collections::HashSet;
 impl Solution {
     pub fn solve_n_queens(n: i32) -> Vec<Vec<String>> {
@@ -7,12 +6,13 @@ impl Solution {
         let mut result: HashSet<Vec<String>> = HashSet::with_capacity(n);
         let board: Vec<Vec<char>> = vec![vec!['.'; n]; n];
 
-        Self::backtrack(n, 0usize, board, &mut result);
+        Self::backtrack(0usize, n, 0usize, board, &mut result);
 
         result.into_iter().collect()
     }
 
     pub fn backtrack(
+        row: usize,
         n: usize,
         queens: usize,
         board: Vec<Vec<char>>,
@@ -23,18 +23,17 @@ impl Solution {
             return;
         }
 
-        for r in 0..n {
-            for c in 0..n {
-                if board[r][c] == 'x' || board[r][c] == 'Q' {
-                    continue;
-                }
-                Self::backtrack(
-                    n,
-                    queens + 1,
-                    Self::update_board(n, (r, c), board.clone()),
-                    result,
-                );
+        for c in 0..n {
+            if board[row][c] == 'x' || board[row][c] == 'Q' {
+                continue;
             }
+            Self::backtrack(
+                row + 1,
+                n,
+                queens + 1,
+                Self::update_board(n, (row, c), board.clone()),
+                result,
+            );
         }
     }
 
