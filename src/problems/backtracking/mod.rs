@@ -5,6 +5,7 @@ pub mod p40;
 pub mod p46;
 pub mod p51;
 pub mod p52;
+pub mod p77;
 pub mod p78;
 pub mod p79;
 pub mod p90;
