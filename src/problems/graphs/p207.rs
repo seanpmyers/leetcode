@@ -61,7 +61,7 @@ pub mod brute_force {
     pub struct Solution {}
     use std::collections::{HashSet, VecDeque};
     impl Solution {
-        pub fn can_finish(num_courses: i32, mut prerequisites: Vec<Vec<i32>>) -> bool {
+        pub fn can_finish(_num_courses: i32, mut prerequisites: Vec<Vec<i32>>) -> bool {
             let rows = prerequisites.len();
 
             let mut queue: VecDeque<usize> = VecDeque::new();

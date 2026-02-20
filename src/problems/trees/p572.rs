@@ -84,6 +84,7 @@ pub mod serialization {
     use std::cell::RefCell;
     use std::rc::Rc;
     impl Solution {
+        #[allow(unused_variables)]
         pub fn is_subtree(
             root: Option<Rc<RefCell<TreeNode>>>,
             sub_root: Option<Rc<RefCell<TreeNode>>>,
@@ -105,11 +106,12 @@ pub mod serialization {
             false
         }
 
+        #[allow(unused_variables)]
         pub fn z_function(input: String) -> Vec<i32> {
             let mut result: Vec<i32> = vec![0; 2000usize];
-            let mut l: usize = 0;
-            let mut r: usize = 0;
-            let mut n: usize = input.len();
+            let l: usize = 0;
+            let r: usize = 0;
+            let n: usize = input.len();
 
             for i in 0..n {
                 if i <= r {
