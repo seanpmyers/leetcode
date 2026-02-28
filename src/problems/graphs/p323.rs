@@ -62,3 +62,55 @@ pub mod first_attempt {
         }
     }
 }
+
+pub mod disjoint_set_union {
+    pub struct Solution;
+    impl Solution {
+        pub fn count_components(n: i32, edges: Vec<Vec<i32>>) -> i32 {
+            let mut result: i32 = n;
+            let n = n as usize;
+            let mut parents: Vec<usize> = (0..n).collect::<Vec<usize>>();
+            let mut ranks: Vec<usize> = vec![1usize; n];
+
+            for edge in &edges {
+                let x = edge[0];
+                let y = edge[1];
+
+                if Self::union(x as usize, y as usize, &mut parents, &mut ranks) {
+                    result -= 1;
+                }
+            }
+
+            result
+        }
+
+        pub fn find(parents: &mut Vec<usize>, n: usize) -> usize {
+            let mut parent: usize = n;
+            while parents[parent] != parent {
+                parents[parent] = parents[parents[parent]];
+                parent = parents[parent];
+            }
+
+            parent
+        }
+
+        pub fn union(x: usize, y: usize, parents: &mut Vec<usize>, ranks: &mut Vec<usize>) -> bool {
+            let xp: usize = Self::find(parents, x);
+            let yp: usize = Self::find(parents, y);
+            if xp == yp {
+                return false;
+            }
+
+            match ranks[xp].cmp(&ranks[yp]) {
+                std::cmp::Ordering::Greater => parents[yp] = xp,
+                std::cmp::Ordering::Less => parents[xp] = yp,
+                std::cmp::Ordering::Equal => {
+                    parents[xp] = yp;
+                    ranks[yp] = ranks[yp] + 1;
+                }
+            }
+
+            true
+        }
+    }
+}
