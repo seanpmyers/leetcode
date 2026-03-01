@@ -48,3 +48,56 @@ pub mod dfs {
         }
     }
 }
+
+pub mod disjoint_set_union {
+    pub struct Solution;
+    impl Solution {
+        pub fn find_redundant_connection(edges: Vec<Vec<i32>>) -> Vec<i32> {
+            let mut parents: Vec<usize> = (0..edges.len()).collect();
+            let mut ranks: Vec<i32> = vec![1; edges.len()];
+            let mut result: Vec<i32> = Vec::new();
+            for edge in &edges {
+                if !Self::union(
+                    edge[0] as usize - 1,
+                    edge[1] as usize - 1,
+                    &mut parents,
+                    &mut ranks,
+                ) {
+                    result = edge.clone()
+                }
+            }
+
+            result
+        }
+
+        pub fn find(x: usize, parents: &mut Vec<usize>) -> usize {
+            let mut parent: usize = x;
+            while parent != parents[parent] {
+                parents[parent] = parents[parents[parent]];
+                parent = parents[parent];
+            }
+
+            parent
+        }
+
+        pub fn union(x: usize, y: usize, parents: &mut Vec<usize>, ranks: &mut Vec<i32>) -> bool {
+            let x: usize = Self::find(x, parents);
+            let y: usize = Self::find(y, parents);
+
+            if x == y {
+                return false;
+            }
+
+            match ranks[x].cmp(&ranks[y]) {
+                std::cmp::Ordering::Less => parents[x] = y,
+                std::cmp::Ordering::Greater => parents[y] = x,
+                std::cmp::Ordering::Equal => {
+                    ranks[x] = ranks[y] + 1;
+                    parents[x] = y;
+                }
+            }
+
+            true
+        }
+    }
+}
