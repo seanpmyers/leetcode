@@ -6,6 +6,7 @@ pub mod p202;
 pub mod p217;
 pub mod p238;
 pub mod p242;
+pub mod p27;
 pub mod p271;
 pub mod p287;
 pub mod p290;
