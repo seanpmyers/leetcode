@@ -7,4 +7,5 @@ pub mod p322;
 pub mod p416;
 pub mod p5;
 pub mod p647;
+pub mod p70;
 pub mod p91;
