@@ -1,5 +1,6 @@
 pub mod p153;
 pub mod p33;
+pub mod p374;
 pub mod p4;
 pub mod p704;
 pub mod p74;
