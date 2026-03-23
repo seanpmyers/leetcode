@@ -1,50 +1,35 @@
-pub struct Solution;
+pub mod backtracking {
+    pub struct Solution;
+    impl Solution {
+        pub fn combination_sum(candidates: Vec<i32>, target: i32) -> Vec<Vec<i32>> {
+            let mut result: Vec<Vec<i32>> = Vec::with_capacity(150usize);
 
-impl Solution {
-    pub fn combination_sum(candidates: Vec<i32>, target: i32) -> Vec<Vec<i32>> {
-        use std::collections::HashSet;
-        pub const MAX_NUMBER_OF_UNIQUE_COMBINATIONS: usize = 150usize;
-        let mut result: HashSet<Vec<i32>> =
-            HashSet::with_capacity(MAX_NUMBER_OF_UNIQUE_COMBINATIONS);
+            Self::backtrack(&mut result, vec![], &candidates, target, 0usize);
 
-        pub fn backtrack(
-            mut current_sum: i32,
-            current_list: &mut Vec<i32>,
-            result: &mut HashSet<Vec<i32>>,
-            candidates: &[i32],
-            target: i32,
-        ) {
-            if result.len() == MAX_NUMBER_OF_UNIQUE_COMBINATIONS {
-                return;
-            }
-
-            if current_sum >= target {
-                if current_sum == target {
-                    result.insert(current_list.to_vec());
-                }
-                return;
-            }
-
-            let Some(first) = candidates.first() else {
-                return;
-            };
-
-            current_sum = current_sum.saturating_add(*first);
-            current_list.push(*first);
-
-            backtrack(current_sum, current_list, result, candidates, target);
-
-            if let Some(previous) = current_list.pop() {
-                current_sum = current_sum.saturating_sub(previous);
-            };
-
-            backtrack(current_sum, current_list, result, &candidates[1..], target);
+            result
         }
 
-        let mut list = Vec::with_capacity(candidates.len());
+        pub fn backtrack(
+            result: &mut Vec<Vec<i32>>,
+            mut current: Vec<i32>,
+            nums: &Vec<i32>,
+            target: i32,
+            i: usize,
+        ) {
+            if target == 0 {
+                result.push(current);
+                return;
+            }
 
-        backtrack(0, &mut list, &mut result, &candidates, target);
+            if i >= nums.len() || target < 0 {
+                return;
+            }
 
-        result.into_iter().collect()
+            current.push(nums[i]);
+            Self::backtrack(result, current.clone(), nums, target - nums[i], i);
+            current.pop();
+
+            Self::backtrack(result, current.clone(), nums, target, i + 1);
+        }
     }
 }
