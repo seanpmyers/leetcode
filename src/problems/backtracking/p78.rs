@@ -1,3 +1,21 @@
+pub mod iterative {
+    pub struct Solution;
+    impl Solution {
+        pub fn subsets(nums: Vec<i32>) -> Vec<Vec<i32>> {
+            let mut result: Vec<Vec<i32>> = vec![vec![]];
+
+            for &n in &nums {
+                let mut previous: Vec<Vec<i32>> = result.clone();
+                for j in 0..previous.len() {
+                    previous[j].push(n);
+                }
+                result.append(&mut previous);
+            }
+
+            result
+        }
+    }
+}
 pub mod backtracking {
     pub struct Solution;
     impl Solution {
