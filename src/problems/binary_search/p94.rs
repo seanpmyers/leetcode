@@ -65,7 +65,7 @@ pub mod mutate_tree {
     use std::cell::RefCell;
     use std::rc::Rc;
     impl Solution {
-        pub fn inorder_traversal(mut root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
+        pub fn inorder_traversal(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
             let Some(root) = root else {
                 return vec![];
             };
