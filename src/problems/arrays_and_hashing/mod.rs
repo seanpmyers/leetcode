@@ -17,3 +17,5 @@ pub mod p36;
 pub mod p3668;
 pub mod p383;
 pub mod p49;
+
+pub mod hashing;
