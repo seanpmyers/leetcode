@@ -1,4 +1,5 @@
-
+- 2026.04.03 - adjacency list
+- 2026.04.02 - ?
 - 2026.04.01 - hashing
 - merge sort
 - quick sort

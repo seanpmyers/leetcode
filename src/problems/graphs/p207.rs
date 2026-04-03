@@ -1,3 +1,41 @@
+pub mod kahns {
+    pub struct Solution;
+    use std::collections::VecDeque;
+    impl Solution {
+        pub fn can_finish(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> bool {
+            let mut list: [i32; 2_000usize] = [0i32; 2_000usize];
+            let mut reqs: Vec<Vec<usize>> = vec![vec![]; num_courses as usize];
+            for i in 0..prerequisites.len() {
+                let course = &prerequisites[i];
+                list[course[1] as usize] += 1;
+                reqs[course[0] as usize].push(course[1] as usize);
+            }
+
+            let mut queue: VecDeque<usize> = VecDeque::new();
+            let n: usize = num_courses as usize;
+            for c in 0..n {
+                if list[c] > 0 {
+                    continue;
+                }
+                queue.push_back(c);
+            }
+
+            let mut count: usize = 0usize;
+            while let Some(c) = queue.pop_front() {
+                count += 1;
+                for &x in &reqs[c] {
+                    list[x] -= 1;
+                    if list[x] == 0 {
+                        queue.push_back(x);
+                    }
+                }
+            }
+
+            count == n
+        }
+    }
+}
+
 pub mod optimized {
     pub struct Solution {}
     use std::collections::{HashMap, HashSet, VecDeque};
@@ -98,6 +136,49 @@ pub mod brute_force {
             }
 
             true
+        }
+    }
+}
+
+pub mod almost_kahns {
+    pub struct Solution;
+    impl Solution {
+        pub fn can_finish(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> bool {
+            let mut list: [bool; 2_000usize] = [true; 2_000usize];
+            let mut reqs: Vec<Vec<usize>> = vec![vec![]; num_courses as usize];
+            for i in 0..prerequisites.len() {
+                let course = &prerequisites[i];
+                list[course[0] as usize] = false;
+                reqs[course[0] as usize].push(course[1] as usize);
+            }
+
+            let mut stack = vec![];
+            let n: usize = num_courses as usize;
+            for c in 0..n {
+                if !list[c] {
+                    continue;
+                }
+                stack.push(c);
+            }
+
+            while let Some(c) = stack.pop() {
+                for r in 0..reqs.len() {
+                    if reqs[r].is_empty() {
+                        continue;
+                    }
+                    reqs[r] = reqs[r]
+                        .iter()
+                        .filter(|x| **x != c)
+                        .cloned()
+                        .collect::<Vec<usize>>();
+
+                    if reqs[r].is_empty() {
+                        stack.push(r);
+                    }
+                }
+            }
+
+            reqs.iter().all(|x| x.is_empty())
         }
     }
 }
