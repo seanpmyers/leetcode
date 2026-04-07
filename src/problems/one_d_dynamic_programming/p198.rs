@@ -15,6 +15,30 @@ pub mod iterative {
         }
     }
 }
+
+pub mod dfs_memory {
+    pub struct Solution;
+    impl Solution {
+        pub fn rob(nums: Vec<i32>) -> i32 {
+            let mut dp: Vec<i32> = vec![-1; nums.len()];
+            Self::dfs(0, &nums, &mut dp)
+        }
+
+        pub fn dfs(i: usize, nums: &Vec<i32>, dp: &mut Vec<i32>) -> i32 {
+            if i >= nums.len() {
+                return 0;
+            }
+
+            if dp[i] > -1 {
+                return dp[i];
+            }
+
+            dp[i] = Self::dfs(i + 1, nums, dp).max(Self::dfs(i + 2, nums, dp) + nums[i]);
+            dp[i]
+        }
+    }
+}
+
 pub mod recursive_dfs {
     pub struct Solution;
     impl Solution {
