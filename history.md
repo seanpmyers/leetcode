@@ -1,3 +1,4 @@
+- 2026.04.09 - 2d dp
 - 2026.04.05 - bit manipulation
 - 2026.04.04 - 1 dimensional dynamic programming
 - 2026.04.03 - adjacency list
