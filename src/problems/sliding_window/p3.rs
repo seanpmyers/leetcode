@@ -26,6 +26,37 @@ pub mod linear_sliding_window {
     }
 }
 
+pub mod linear_sliding_window_2 {
+    pub struct Solution;
+    use std::collections::HashSet;
+    impl Solution {
+        pub fn length_of_longest_substring(s: String) -> i32 {
+            let s: &[u8] = s.as_bytes();
+            if s.len() < 1 {
+                return 0;
+            }
+            let mut result: i32 = 0;
+            let mut set: HashSet<u8> = HashSet::with_capacity(s.len());
+            let mut l: usize = 0;
+            let mut r: usize = 0;
+
+            while l < s.len() && r < s.len() {
+                if !set.insert(s[r]) {
+                    result = result.max(l.abs_diff(r) as i32);
+                    while s[l] != s[r] {
+                        set.remove(&s[l]);
+                        l += 1;
+                    }
+                    l += 1;
+                }
+                r += 1;
+            }
+
+            result.max(l.abs_diff(r) as i32)
+        }
+    }
+}
+
 pub mod hash_map {
     pub struct Solution;
     pub fn length_of_longest_substring(s: String) -> i32 {
