@@ -1,3 +1,22 @@
+pub mod linear_simplest {
+    pub struct Solution;
+    impl Solution {
+        pub fn remove_duplicates(nums: &mut Vec<i32>) -> i32 {
+            if nums.len() <= 2 {
+                return nums.len() as i32;
+            }
+            let mut k: usize = 2usize;
+            for i in 2..nums.len() {
+                if nums[i] != nums[k - 2] {
+                    nums[k] = nums[i];
+                    k += 1;
+                }
+            }
+
+            k as i32
+        }
+    }
+}
 pub mod linear {
     pub struct Solution;
     impl Solution {
