@@ -11,12 +11,14 @@ pub mod p27;
 pub mod p271;
 pub mod p287;
 pub mod p290;
+pub mod p303;
 pub mod p347;
 pub mod p349;
 pub mod p36;
 pub mod p3668;
 pub mod p383;
 pub mod p49;
+pub mod p560;
 pub mod p724;
 pub mod p918;
 
