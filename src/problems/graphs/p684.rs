@@ -49,6 +49,75 @@ pub mod dfs {
     }
 }
 
+pub mod disjoint_set_union_2 {
+    pub struct Solution;
+    pub struct UnionFind {
+        pub parents: Vec<usize>,
+        pub rank: Vec<usize>,
+    }
+
+    impl UnionFind {
+        pub fn new(n: usize) -> Self {
+            Self {
+                parents: (0..n + 1).collect(),
+                rank: vec![0; n + 1],
+            }
+        }
+
+        pub fn find(&mut self, n: usize) -> usize {
+            let mut p: usize = self.parents[n];
+
+            while p != self.parents[p] {
+                self.parents[p] = self.parents[self.parents[p]];
+                p = self.parents[p];
+            }
+
+            p
+        }
+
+        pub fn union(&mut self, x: usize, y: usize) -> bool {
+            let x: usize = self.find(x);
+            let y: usize = self.find(y);
+
+            if x == y {
+                return false;
+            }
+
+            match self.rank[x].cmp(&self.rank[y]) {
+                std::cmp::Ordering::Greater => {
+                    self.parents[y] = x;
+                }
+                std::cmp::Ordering::Less => {
+                    self.parents[x] = y;
+                }
+                std::cmp::Ordering::Equal => {
+                    self.parents[y] = x;
+                    self.rank[x] += self.rank[y];
+                }
+            }
+
+            true
+        }
+    }
+
+    impl Solution {
+        pub fn find_redundant_connection(edges: Vec<Vec<i32>>) -> Vec<i32> {
+            let mut find: UnionFind = UnionFind::new(edges.len());
+            let mut result: Vec<i32> = vec![0i32; 2usize];
+
+            for i in 0..edges.len() {
+                let x = edges[i][0];
+                let y = edges[i][1];
+                if !find.union(x as usize, y as usize) {
+                    result = vec![x, y];
+                }
+            }
+
+            result
+        }
+    }
+}
+
 pub mod disjoint_set_union {
     pub struct Solution;
     impl Solution {
