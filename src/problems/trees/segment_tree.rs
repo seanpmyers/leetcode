@@ -1,6 +1,4 @@
-use std::{cell::RefCell, rc::Rc};
-
-pub type SegmentNode = Rc<RefCell<SegmentTree>>;
+pub type SegmentNode = Box<SegmentTree>;
 
 #[derive(Debug)]
 pub struct SegmentTree {
@@ -28,15 +26,9 @@ impl SegmentTree {
             return result;
         }
 
-        result.left = Some(Rc::new(RefCell::new(Self::build(
-            &numbers, left_index, middle,
-        ))));
+        result.left = Some(Box::new(Self::build(&numbers, left_index, middle)));
 
-        result.right = Some(Rc::new(RefCell::new(Self::build(
-            &numbers,
-            middle + 1,
-            right_index,
-        ))));
+        result.right = Some(Box::new(Self::build(&numbers, middle + 1, right_index)));
 
         result.sum =
             Self::get_node_sum(result.left.as_ref()) + Self::get_node_sum(result.right.as_ref());
@@ -45,7 +37,7 @@ impl SegmentTree {
     }
 
     fn get_node_sum(node: Option<&SegmentNode>) -> i32 {
-        node.map_or(0, |n| n.borrow().sum)
+        node.map_or(0, |n| n.sum)
     }
 
     pub fn update(&mut self, index: usize, value: i32) {
@@ -58,13 +50,13 @@ impl SegmentTree {
 
         match index.cmp(&middle) {
             std::cmp::Ordering::Less | std::cmp::Ordering::Equal => {
-                if let Some(left) = &self.left {
-                    left.borrow_mut().update(index, value);
+                if let Some(left) = self.left.as_mut() {
+                    left.update(index, value);
                 }
             }
             std::cmp::Ordering::Greater => {
-                if let Some(right) = &self.right {
-                    right.borrow_mut().update(index, value);
+                if let Some(right) = self.right.as_mut() {
+                    right.update(index, value);
                 }
             }
         };
@@ -82,22 +74,22 @@ impl SegmentTree {
         if left_index > middle
             && let Some(right) = &self.right
         {
-            return right.borrow().range_query(left_index, right_index);
+            return right.range_query(left_index, right_index);
         }
 
         if right_index <= middle
             && let Some(left) = &self.left
         {
-            return left.borrow().range_query(left_index, right_index);
+            return left.range_query(left_index, right_index);
         }
 
         self.left
             .as_ref()
-            .map_or(0, |n| n.borrow().range_query(left_index, middle))
+            .map_or(0, |n| n.range_query(left_index, middle))
             + self
                 .right
                 .as_ref()
-                .map_or(0, |n| n.borrow().range_query(middle + 1, right_index))
+                .map_or(0, |n| n.range_query(middle + 1, right_index))
     }
 }
 
