@@ -13,3 +13,5 @@ pub mod p297;
 pub mod p543;
 pub mod p572;
 pub mod p98;
+
+pub mod segment_tree;
