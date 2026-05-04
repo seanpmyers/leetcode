@@ -21,6 +21,7 @@ pub mod p383;
 pub mod p49;
 pub mod p560;
 pub mod p724;
+pub mod p796;
 pub mod p918;
 
 pub mod hashing;
