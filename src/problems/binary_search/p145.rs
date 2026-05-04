@@ -93,18 +93,17 @@ pub mod iterative {
                     continue;
                 }
 
-                if let Some(left) = node.borrow().left.clone() {
-                    stack.push((left, false));
-                }
+                stack.push((node.clone(), true));
 
                 if let Some(right) = node.borrow().right.clone() {
                     stack.push((right, false));
                 }
 
-                stack.push((node.clone(), true));
+                if let Some(left) = node.borrow().left.clone() {
+                    stack.push((left, false));
+                }
             }
 
-            result.reverse();
             result
         }
     }
