@@ -16,6 +16,36 @@ pub mod iterative {
         }
     }
 }
+
+pub mod backtracking2 {
+    pub struct Solution;
+    impl Solution {
+        pub fn subsets(nums: Vec<i32>) -> Vec<Vec<i32>> {
+            let mut result: Vec<Vec<i32>> = vec![];
+
+            Self::backtrack(&mut result, &nums, 0usize, &mut vec![]);
+
+            result
+        }
+
+        pub fn backtrack(
+            result: &mut Vec<Vec<i32>>,
+            nums: &Vec<i32>,
+            i: usize,
+            current: &mut Vec<i32>,
+        ) {
+            if i >= nums.len() {
+                result.push(current.clone());
+                return;
+            }
+            current.push(nums[i]);
+            Self::backtrack(result, nums, i + 1, current);
+            current.pop();
+            Self::backtrack(result, nums, i + 1, current);
+        }
+    }
+}
+
 pub mod backtracking {
     pub struct Solution;
     impl Solution {
