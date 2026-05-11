@@ -1,50 +1,80 @@
-pub struct Solution;
+pub mod iterative {
+    pub struct Solution;
+    impl Solution {
+        pub fn letter_combinations(digits: String) -> Vec<String> {
+            let mut answer: Vec<String> = Vec::with_capacity(3usize.pow(digits.len() as u32));
+            answer.push(String::new());
+            let digits = digits.as_bytes();
+            for i in 0..digits.len() {
+                let mut result = vec![];
+                while let Some(x) = answer.pop() {
+                    let mut offset = digits[i].abs_diff(b'2') * 3;
+                    if digits[i] >= b'8' {
+                        offset += 1;
+                    }
+                    result.push(format!("{x}{}", (b'a' + offset) as char));
+                    result.push(format!("{x}{}", (b'b' + offset) as char));
+                    result.push(format!("{x}{}", (b'c' + offset) as char));
+                    if digits[i] == b'7' || digits[i] == b'9' {
+                        result.push(format!("{x}{}", (b'd' + offset) as char));
+                    }
+                }
+                answer = result;
+            }
 
-use std::collections::HashMap;
-impl Solution {
-    pub fn letter_combinations(digits: String) -> Vec<String> {
-        let mut result: Vec<String> = vec![];
-
-        let map: HashMap<u8, Vec<u8>> = HashMap::from([
-            (b'2', [b'a', b'b', b'c'].to_vec()),
-            (b'3', [b'd', b'e', b'f'].to_vec()),
-            (b'4', [b'g', b'h', b'i'].to_vec()),
-            (b'5', [b'j', b'k', b'l'].to_vec()),
-            (b'6', [b'm', b'n', b'o'].to_vec()),
-            (b'7', [b'p', b'q', b'r', b's'].to_vec()),
-            (b'8', [b't', b'u', b'v'].to_vec()),
-            (b'9', [b'w', b'x', b'y', b'z'].to_vec()),
-        ]);
-
-        Self::backtrack(
-            &mut result,
-            digits.as_bytes(),
-            &map,
-            Vec::with_capacity(digits.len()),
-        );
-
-        result
+            answer
+        }
     }
+}
+pub mod backtrack {
+    pub struct Solution;
 
-    pub fn backtrack(
-        result: &mut Vec<String>,
-        input: &[u8],
-        map: &HashMap<u8, Vec<u8>>,
-        mut current: Vec<u8>,
-    ) {
-        if input.is_empty() {
-            result.push(current.into_iter().map(|x| x as char).collect::<String>());
-            return;
+    use std::collections::HashMap;
+    impl Solution {
+        pub fn letter_combinations(digits: String) -> Vec<String> {
+            let mut result: Vec<String> = vec![];
+
+            let map: HashMap<u8, Vec<u8>> = HashMap::from([
+                (b'2', [b'a', b'b', b'c'].to_vec()),
+                (b'3', [b'd', b'e', b'f'].to_vec()),
+                (b'4', [b'g', b'h', b'i'].to_vec()),
+                (b'5', [b'j', b'k', b'l'].to_vec()),
+                (b'6', [b'm', b'n', b'o'].to_vec()),
+                (b'7', [b'p', b'q', b'r', b's'].to_vec()),
+                (b'8', [b't', b'u', b'v'].to_vec()),
+                (b'9', [b'w', b'x', b'y', b'z'].to_vec()),
+            ]);
+
+            Self::backtrack(
+                &mut result,
+                digits.as_bytes(),
+                &map,
+                Vec::with_capacity(digits.len()),
+            );
+
+            result
         }
 
-        let Some(letters) = map.get(&input[0]) else {
-            panic!("uh oh");
-        };
+        pub fn backtrack(
+            result: &mut Vec<String>,
+            input: &[u8],
+            map: &HashMap<u8, Vec<u8>>,
+            mut current: Vec<u8>,
+        ) {
+            if input.is_empty() {
+                result.push(current.into_iter().map(|x| x as char).collect::<String>());
+                return;
+            }
 
-        for letter in letters.into_iter() {
-            current.push(*letter);
-            Self::backtrack(result, &input[1..], map, current.clone());
-            current.pop();
+            let Some(letters) = map.get(&input[0]) else {
+                panic!("uh oh");
+            };
+
+            for letter in letters.into_iter() {
+                current.push(*letter);
+                Self::backtrack(result, &input[1..], map, current.clone());
+                current.pop();
+            }
         }
     }
 }
