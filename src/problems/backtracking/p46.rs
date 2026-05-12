@@ -55,3 +55,31 @@ pub mod backtracking {
         }
     }
 }
+
+pub mod backtrack_2 {
+    pub struct Solution;
+    impl Solution {
+        pub fn permute(nums: Vec<i32>) -> Vec<Vec<i32>> {
+            Self::recurse(0usize, &nums)
+        }
+
+        pub fn recurse(i: usize, nums: &Vec<i32>) -> Vec<Vec<i32>> {
+            if i >= nums.len() {
+                return vec![vec![]];
+            }
+
+            let mut result: Vec<Vec<i32>> = vec![];
+            let perms: Vec<Vec<i32>> = Self::recurse(i + 1, nums);
+
+            for p in perms.into_iter() {
+                for j in 0..p.len() + 1 {
+                    let mut copy = p.clone();
+                    copy.insert(j, nums[i]);
+                    result.push(copy);
+                }
+            }
+
+            result
+        }
+    }
+}
