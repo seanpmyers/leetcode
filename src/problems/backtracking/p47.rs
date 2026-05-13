@@ -1,3 +1,35 @@
+pub mod swap {
+    pub struct Solution;
+    impl Solution {
+        pub fn permute_unique(mut nums: Vec<i32>) -> Vec<Vec<i32>> {
+            if nums.is_empty() {
+                return vec![];
+            }
+            nums.sort();
+            let mut result = vec![];
+            Self::backtrack(0usize, &mut nums, &mut result);
+            result
+        }
+
+        pub fn backtrack(i: usize, nums: &mut Vec<i32>, result: &mut Vec<Vec<i32>>) {
+            if i == nums.len() {
+                result.push(nums.clone());
+                return;
+            }
+
+            for j in i..nums.len() {
+                if j > i && nums[i] == nums[j] {
+                    continue;
+                }
+                nums.swap(i, j);
+                Self::backtrack(i + 1, nums, result);
+            }
+            for j in (i + 1..nums.len()).rev() {
+                nums.swap(i, j);
+            }
+        }
+    }
+}
 pub mod hashset {
     pub struct Solution;
     use std::collections::HashSet;

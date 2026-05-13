@@ -1,3 +1,28 @@
+pub mod swapping {
+    pub struct Solution;
+    impl Solution {
+        pub fn permute(mut nums: Vec<i32>) -> Vec<Vec<i32>> {
+            if nums.is_empty() {
+                return vec![];
+            }
+            let mut result: Vec<Vec<i32>> = vec![];
+            fn dfs(i: usize, nums: &mut Vec<i32>, result: &mut Vec<Vec<i32>>) {
+                if i == nums.len() {
+                    result.push(nums.clone());
+                    return;
+                }
+
+                for j in i..nums.len() {
+                    nums.swap(i, j);
+                    dfs(i + 1, nums, result);
+                    nums.swap(i, j);
+                }
+            }
+            dfs(0usize, &mut nums, &mut result);
+            result
+        }
+    }
+}
 pub mod iterative {
     pub struct Solution;
     impl Solution {
