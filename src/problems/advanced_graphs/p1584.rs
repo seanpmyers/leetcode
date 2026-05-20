@@ -1,3 +1,42 @@
+pub mod prims_optimal {
+    pub struct Solution;
+    impl Solution {
+        pub fn min_cost_connect_points(points: Vec<Vec<i32>>) -> i32 {
+            let n: usize = points.len();
+            let mut result: i32 = 0;
+            let mut current: usize = 0;
+            let mut visited: Vec<bool> = vec![false; n];
+            let mut min_distance: Vec<i32> = vec![10_000_000; n + 1];
+            let mut count: usize = 0;
+
+            while count < n - 1 {
+                visited[current] = true;
+                if n == 0 {
+                    break;
+                }
+                let mut next: usize = points.len();
+                for i in 0..points.len() {
+                    if visited[i] {
+                        continue;
+                    }
+                    let distance: i32 = (points[current][0] - points[i][0]).abs()
+                        + (points[current][1] - points[i][1]).abs();
+
+                    min_distance[i] = min_distance[i].min(distance);
+
+                    if next == points.len() || min_distance[i] <= min_distance[next] {
+                        next = i;
+                    }
+                }
+                current = next;
+                result += min_distance[next];
+                count += 1;
+            }
+
+            result
+        }
+    }
+}
 pub mod prims {
     pub struct Solution;
     use std::cmp::Reverse;
