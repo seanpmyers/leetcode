@@ -1,3 +1,78 @@
+pub mod krustals {
+    pub struct Solution;
+    use std::cmp::Reverse;
+    use std::collections::BinaryHeap;
+    impl Solution {
+        pub fn min_cost_connect_points(points: Vec<Vec<i32>>) -> i32 {
+            let mut n: usize = points.len();
+            let mut uf: UnionFind = UnionFind::new(n);
+            let mut heap: BinaryHeap<(Reverse<i32>, usize, usize)> = BinaryHeap::new();
+            for i in 0..n {
+                for j in i + 1..n {
+                    let distance: i32 =
+                        (points[i][0] - points[j][0]).abs() + (points[i][1] - points[j][1]).abs();
+                    heap.push((Reverse(distance), i, j));
+                }
+            }
+            let mut result: i32 = 0;
+            while let Some((Reverse(distance), x, y)) = heap.pop() {
+                if !uf.union(x, y) {
+                    continue;
+                }
+                n -= 1;
+                result += distance;
+                if n == 1 {
+                    break;
+                }
+            }
+            result
+        }
+    }
+
+    pub struct UnionFind {
+        pub parents: Vec<usize>,
+        pub ranks: Vec<usize>,
+    }
+
+    impl UnionFind {
+        pub fn new(n: usize) -> Self {
+            Self {
+                parents: (0..n).collect(),
+                ranks: vec![1; n],
+            }
+        }
+
+        pub fn find(&mut self, i: usize) -> usize {
+            let mut p: usize = i;
+            while p != self.parents[p] {
+                self.parents[p] = self.parents[self.parents[p]];
+                p = self.parents[p];
+            }
+
+            p
+        }
+
+        pub fn union(&mut self, x: usize, y: usize) -> bool {
+            let x: usize = self.find(x);
+            let y: usize = self.find(y);
+
+            if x == y {
+                return false;
+            }
+
+            if self.ranks[x] >= self.ranks[y] {
+                self.ranks[x] += self.ranks[y];
+                self.parents[y] = x;
+                return true;
+            }
+
+            self.ranks[y] += self.ranks[x];
+            self.parents[x] = y;
+
+            true
+        }
+    }
+}
 pub mod prims_optimal {
     pub struct Solution;
     impl Solution {
