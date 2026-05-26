@@ -5,6 +5,7 @@ pub mod p33;
 pub mod p374;
 pub mod p4;
 pub mod p450;
+pub mod p69;
 pub mod p701;
 pub mod p704;
 pub mod p74;
