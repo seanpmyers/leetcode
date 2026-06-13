@@ -1,3 +1,33 @@
+pub mod hashset {
+    pub struct Solution;
+    use std::collections::HashSet;
+    impl Solution {
+        pub fn last_stone_weight_ii(stones: Vec<i32>) -> i32 {
+            let n: usize = stones.len();
+            let sum: i32 = stones.iter().sum();
+            let target: i32 = sum / 2;
+            let mut set: HashSet<i32> = HashSet::with_capacity(n);
+            set.insert(0i32);
+
+            for &stone in &stones {
+                let mut extended = vec![];
+                for &prev in set.iter() {
+                    if prev + stone == target {
+                        return sum - 2 * target;
+                    }
+
+                    if prev + stone < target {
+                        extended.push(prev + stone);
+                    }
+                }
+                set.extend(extended.into_iter());
+            }
+
+            let max: i32 = set.into_iter().max().unwrap_or(0i32);
+            sum - max * 2
+        }
+    }
+}
 pub mod dp {
     pub struct Solution;
     impl Solution {
