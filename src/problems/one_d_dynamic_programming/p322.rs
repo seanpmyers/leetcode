@@ -1,3 +1,47 @@
+pub mod queue {
+    pub struct Solution;
+    use std::collections::VecDeque;
+    impl Solution {
+        pub fn coin_change(coins: Vec<i32>, amount: i32) -> i32 {
+            if amount == 0 {
+                return 0;
+            }
+
+            let amount: usize = amount as usize;
+            let mut queue: VecDeque<usize> = VecDeque::new();
+            let mut seen: Vec<bool> = vec![false; amount + 1];
+            seen[0] = true;
+            queue.push_back(0usize);
+            let mut result: i32 = 0i32;
+
+            while !queue.is_empty() {
+                let q_len: usize = queue.len();
+                result += 1;
+                for _ in 0..q_len {
+                    let Some(previous) = queue.pop_front() else {
+                        continue;
+                    };
+                    for &coin in &coins {
+                        let mut next: usize = previous + coin as usize;
+                        if next == amount {
+                            return result;
+                        }
+                        if next > amount {
+                            continue;
+                        }
+                        if seen[next] {
+                            continue;
+                        }
+                        queue.push_back(next);
+                        seen[next] = true;
+                    }
+                }
+            }
+
+            -1i32
+        }
+    }
+}
 pub mod recursion {
     pub struct Solution;
     impl Solution {
