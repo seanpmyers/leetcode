@@ -8,6 +8,7 @@ pub mod p322;
 pub mod p416;
 pub mod p474;
 pub mod p5;
+pub mod p518;
 pub mod p63;
 pub mod p647;
 pub mod p70;
