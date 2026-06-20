@@ -1,3 +1,33 @@
+pub mod dfs2 {
+    pub struct Solution;
+    impl Solution {
+        pub fn longest_common_subsequence(text1: String, text2: String) -> i32 {
+            let x = text1.as_bytes();
+            let y = text2.as_bytes();
+            let mut dp = vec![vec![-1i32; text2.len()]; text1.len()];
+
+            Self::dfs(x, y, 0usize, 0usize, &mut dp)
+        }
+
+        pub fn dfs(x: &[u8], y: &[u8], xi: usize, yi: usize, dp: &mut Vec<Vec<i32>>) -> i32 {
+            if xi == x.len() || yi == y.len() {
+                return 0;
+            }
+
+            if dp[xi][yi] != -1i32 {
+                return dp[xi][yi];
+            }
+
+            if x[xi] == y[yi] {
+                dp[xi][yi] = 1 + Self::dfs(x, y, xi + 1, yi + 1, dp);
+            } else {
+                dp[xi][yi] = Self::dfs(x, y, xi + 1, yi, dp).max(Self::dfs(x, y, xi, yi + 1, dp));
+            }
+
+            dp[xi][yi]
+        }
+    }
+}
 pub mod optimal {
     pub struct Solution;
     impl Solution {
