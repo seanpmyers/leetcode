@@ -30,6 +30,7 @@ pub mod p705;
 pub mod p706;
 pub mod p724;
 pub mod p796;
+pub mod p896;
 pub mod p918;
 
 pub mod hashing;
