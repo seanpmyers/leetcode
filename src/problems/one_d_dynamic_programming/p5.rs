@@ -1,3 +1,57 @@
+pub mod two_loops {
+    pub struct Solution;
+    impl Solution {
+        pub fn longest_palindrome(s: String) -> String {
+            if s.len() == 1 {
+                return s;
+            }
+
+            let s: &[u8] = s.as_bytes();
+            let mut l: usize = 0;
+            let mut r: usize = 0;
+
+            for i in 0..s.len() {
+                let mut x: usize = i;
+                let mut y: usize = i;
+                while s[x] == s[y] {
+                    if y - x > r - l {
+                        l = x;
+                        r = y;
+                    }
+                    if x.checked_sub(1).is_none() {
+                        break;
+                    }
+                    if y + 1 >= s.len() {
+                        break;
+                    }
+                    x -= 1;
+                    y += 1;
+                }
+
+                x = i;
+                y = i + 1;
+                while y < s.len() && s[x] == s[y] {
+                    if y.abs_diff(x) > l.abs_diff(r) {
+                        l = x;
+                        r = y;
+                    }
+
+                    if x.checked_sub(1).is_none() {
+                        break;
+                    }
+                    if y + 1 >= s.len() {
+                        break;
+                    }
+
+                    x -= 1;
+                    y += 1;
+                }
+            }
+
+            s[l..=r].iter().map(|x| *x as char).collect()
+        }
+    }
+}
 pub mod manacher {
     pub struct Solution;
     impl Solution {
