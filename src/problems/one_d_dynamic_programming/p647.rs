@@ -1,3 +1,47 @@
+pub mod two_loops {
+    pub struct Solution;
+    impl Solution {
+        pub fn count_substrings(s: String) -> i32 {
+            let s: &[u8] = s.as_bytes();
+
+            let mut result: i32 = 0;
+
+            for i in 0..s.len() {
+                let mut left: usize = i;
+                let mut right: usize = i + 1;
+
+                while right < s.len() && s[left] == s[right] {
+                    result += 1;
+                    if left.checked_sub(1).is_none() {
+                        break;
+                    }
+                    if right + 1 >= s.len() {
+                        break;
+                    }
+                    left -= 1;
+                    right += 1;
+                }
+
+                left = i;
+                right = i;
+
+                while right < s.len() && s[left] == s[right] {
+                    result += 1;
+                    if left.checked_sub(1).is_none() {
+                        break;
+                    }
+                    if right + 1 >= s.len() {
+                        break;
+                    }
+                    left -= 1;
+                    right += 1;
+                }
+            }
+
+            result
+        }
+    }
+}
 pub mod manacher {
     pub struct Solution;
     impl Solution {
