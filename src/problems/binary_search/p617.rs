@@ -22,16 +22,16 @@ use std::cell::RefCell;
 use std::rc::Rc;
 impl Solution {
     pub fn merge_trees(
-        mut root1: Option<Rc<RefCell<TreeNode>>>,
-        mut root2: Option<Rc<RefCell<TreeNode>>>,
+        root1: Option<Rc<RefCell<TreeNode>>>,
+        root2: Option<Rc<RefCell<TreeNode>>>,
     ) -> Option<Rc<RefCell<TreeNode>>> {
         match (root1, root2) {
             (None, None) => None,
             (Some(n), None) | (None, Some(n)) => Some(n),
-            (Some(mut x), Some(mut y)) => {
-                let mut left =
+            (Some(x), Some(y)) => {
+                let left =
                     Self::merge_trees(x.borrow_mut().left.take(), y.borrow_mut().left.take());
-                let mut right =
+                let right =
                     Self::merge_trees(x.borrow_mut().right.take(), y.borrow_mut().right.take());
 
                 x.borrow_mut().val += y.borrow().val;

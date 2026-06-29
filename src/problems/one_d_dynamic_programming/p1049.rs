@@ -31,7 +31,7 @@ pub mod hashset {
 pub mod dp {
     pub struct Solution;
     impl Solution {
-        pub fn last_stone_weight_ii(mut stones: Vec<i32>) -> i32 {
+        pub fn last_stone_weight_ii(stones: Vec<i32>) -> i32 {
             if stones.len() == 1 {
                 return stones[0];
             }

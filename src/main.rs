@@ -35,7 +35,6 @@ impl ListNode {
 
 fn main() {
     println!("Leetcode");
-    let mut x = Box::new(9i32);
 }
 
 pub struct Solution;

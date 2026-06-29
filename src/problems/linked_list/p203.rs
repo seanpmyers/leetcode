@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub mod no_allocation {
     // Definition for singly-linked list.
     #[derive(PartialEq, Eq, Clone, Debug)]

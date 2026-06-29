@@ -31,7 +31,7 @@ pub mod topological {
             while let Some(pre) = queue.pop_front() {
                 for &course in &adj[pre] {
                     is_req[course].insert(pre);
-                    let mut set = is_req[pre].clone();
+                    let set = is_req[pre].clone();
                     is_req[course].extend(set);
                     indegree[course] -= 1;
                     if indegree[course] == 0 {

@@ -22,7 +22,7 @@ pub mod queue {
                         continue;
                     };
                     for &coin in &coins {
-                        let mut next: usize = previous + coin as usize;
+                        let next: usize = previous + coin as usize;
                         if next == amount {
                             return result;
                         }

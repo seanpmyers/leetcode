@@ -35,11 +35,11 @@ pub mod dp {
                             yi += 1;
                         }
                     }
-                    (Some(len), None) => {
+                    (Some(_), None) => {
                         result.push(x[xi]);
                         xi += 1;
                     }
-                    (None, Some(len)) => {
+                    (None, Some(_)) => {
                         result.push(y[yi]);
                         yi += 1;
                     }
@@ -81,13 +81,13 @@ pub mod dp {
             }
 
             if x[xi] == y[yi] {
-                let mut sequence = 1 + Self::dfs(x, y, xi + 1, yi + 1, dp);
+                let sequence = 1 + Self::dfs(x, y, xi + 1, yi + 1, dp);
                 dp[xi][yi] = Some(sequence.clone());
                 return sequence;
             }
 
-            let mut take_x = 1 + Self::dfs(x, y, xi + 1, yi, dp);
-            let mut take_y = 1 + Self::dfs(x, y, xi, yi + 1, dp);
+            let take_x = 1 + Self::dfs(x, y, xi + 1, yi, dp);
+            let take_y = 1 + Self::dfs(x, y, xi, yi + 1, dp);
             let result = take_x.min(take_y);
             dp[xi][yi] = Some(result);
             result
@@ -124,13 +124,13 @@ pub mod too_much_memory {
             }
 
             if xi == x.len() {
-                let mut remaining: Vec<u8> = y[yi..].iter().rev().cloned().collect();
+                let remaining: Vec<u8> = y[yi..].iter().rev().cloned().collect();
                 dp[xi][yi] = Some(remaining.clone());
                 return remaining;
             }
 
             if yi == y.len() {
-                let mut remaining: Vec<u8> = x[xi..].iter().rev().cloned().collect();
+                let remaining: Vec<u8> = x[xi..].iter().rev().cloned().collect();
                 dp[xi][yi] = Some(remaining.clone());
                 return remaining;
             }

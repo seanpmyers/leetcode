@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub mod iter {
     pub struct Solution;
     // Definition for singly-linked list.

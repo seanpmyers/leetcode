@@ -3,7 +3,7 @@ pub mod topological {
     use std::collections::VecDeque;
     impl Solution {
         pub fn find_order(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> Vec<i32> {
-            let mut n: usize = num_courses as usize;
+            let n: usize = num_courses as usize;
             let mut adj: Vec<Vec<usize>> = vec![vec![]; n + 1];
             let mut indegree: Vec<u32> = vec![0u32; n + 1];
             for pair in prerequisites.into_iter() {

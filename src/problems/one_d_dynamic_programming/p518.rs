@@ -7,8 +7,6 @@ pub mod dynamic_programming {
             let mut dp: Vec<usize> = vec![0usize; amount + 1];
             dp[0] = 1;
 
-            let mut i: usize = 0;
-
             for &coin in &coins {
                 let coin = coin as usize;
                 for i in coin..=amount {
