@@ -1,3 +1,20 @@
+pub mod reverse_transpose {
+    pub struct Solution;
+    impl Solution {
+        pub fn rotate(matrix: &mut Vec<Vec<i32>>) {
+            matrix.reverse();
+            let rows = matrix.len();
+            let columns = matrix[0].len();
+            for r in 0..rows {
+                for c in r + 1..columns {
+                    let temp = matrix[r][c];
+                    matrix[r][c] = matrix[c][r];
+                    matrix[c][r] = temp;
+                }
+            }
+        }
+    }
+}
 pub mod swap_four {
     pub struct Solution;
     impl Solution {
