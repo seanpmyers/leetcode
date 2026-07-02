@@ -1,3 +1,28 @@
+pub mod for_loop {
+    pub struct Solution;
+    impl Solution {
+        pub fn can_partition(nums: Vec<i32>) -> bool {
+            let sum: i32 = nums.iter().sum();
+            if sum % 2 == 1 {
+                return false;
+            }
+            let target: usize = (sum / 2) as usize;
+
+            let mut dp: Vec<bool> = vec![false; target + 1];
+            dp[0] = true;
+            for num in nums {
+                let num = num as usize;
+                for i in (num..=target).rev() {
+                    if dp[i - num] {
+                        dp[i] = true;
+                    }
+                }
+            }
+
+            dp[target]
+        }
+    }
+}
 pub mod dfs_memoized {
     pub struct Solution;
     impl Solution {
