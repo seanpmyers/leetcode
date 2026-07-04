@@ -1,3 +1,44 @@
+pub mod practice {
+    pub struct Solution;
+    use std::collections::VecDeque;
+    impl Solution {
+        pub fn can_finish(num_courses: i32, prerequisites: Vec<Vec<i32>>) -> bool {
+            let n = num_courses as usize;
+            let mut dp: Vec<Vec<usize>> = vec![vec![]; n];
+            let mut degree: Vec<u32> = vec![0u32; n];
+            for req in prerequisites.iter() {
+                let pre: usize = req[0] as usize;
+                let course: usize = req[1] as usize;
+
+                dp[pre].push(course);
+                degree[course] += 1;
+            }
+
+            let mut queue: VecDeque<usize> = VecDeque::new();
+
+            for (course, count) in degree.iter().enumerate() {
+                if count != &0 {
+                    continue;
+                }
+                queue.push_back(course);
+            }
+
+            while let Some(completed) = queue.pop_front() {
+                for &next in &dp[completed] {
+                    if degree[next] > 0 {
+                        degree[next] -= 1;
+                    }
+                    if degree[next] == 0 {
+                        queue.push_back(next);
+                    }
+                }
+            }
+
+            degree.into_iter().all(|count| count == 0)
+        }
+    }
+}
+
 pub mod topological_khans {
     pub struct Solution;
     use std::collections::VecDeque;
