@@ -1,3 +1,75 @@
+pub mod practice_krustal {
+    pub struct Solution;
+    pub struct Dsu {
+        pub parents: Vec<usize>,
+        pub rank: Vec<usize>,
+    }
+
+    impl Dsu {
+        pub fn new(n: usize) -> Self {
+            Self {
+                parents: (0..=n).collect(),
+                rank: vec![1usize; n + 1],
+            }
+        }
+
+        pub fn find(&mut self, x: usize) -> usize {
+            let mut p: usize = x;
+
+            while p != self.parents[p] {
+                self.parents[p] = self.parents[self.parents[p]];
+                p = self.parents[p];
+            }
+
+            p
+        }
+
+        pub fn union(&mut self, x: usize, y: usize) -> bool {
+            let mut x: usize = self.find(x);
+            let mut y: usize = self.find(y);
+
+            if x == y {
+                return false;
+            }
+
+            if self.rank[x] < self.rank[y] {
+                std::mem::swap(&mut x, &mut y);
+            }
+
+            self.rank[x] += self.rank[y];
+            self.parents[y] = x;
+
+            true
+        }
+    }
+
+    impl Solution {
+        pub fn min_cost_connect_points(points: Vec<Vec<i32>>) -> i32 {
+            let n: usize = points.len();
+            let mut dsu: Dsu = Dsu::new(n);
+            let mut edges: Vec<(i32, usize, usize)> = vec![];
+            for x in 0..n {
+                for y in x + 1..n {
+                    let distance: i32 =
+                        (points[x][0] - points[y][0]).abs() + (points[x][1] - points[y][1]).abs();
+                    edges.push((distance, x, y));
+                }
+            }
+
+            edges.sort_unstable();
+
+            let mut result: i32 = 0i32;
+            for &(distance, x, y) in &edges {
+                if !dsu.union(x, y) {
+                    continue;
+                }
+                result += distance;
+            }
+
+            result
+        }
+    }
+}
 pub mod krustals {
     pub struct Solution;
     use std::cmp::Reverse;
