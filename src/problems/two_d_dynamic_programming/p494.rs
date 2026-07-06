@@ -1,3 +1,20 @@
+pub mod recursion {
+    pub struct Solution;
+    impl Solution {
+        pub fn find_target_sum_ways(nums: Vec<i32>, target: i32) -> i32 {
+            Self::dfs(0usize, target, &nums)
+        }
+
+        pub fn dfs(i: usize, target: i32, nums: &Vec<i32>) -> i32 {
+            if i == nums.len() {
+                return if target == 0 { 1i32 } else { 0i32 };
+            }
+
+            Self::dfs(i + 1, target + (nums[i] * -1), nums)
+                + Self::dfs(i + 1, target + nums[i], nums)
+        }
+    }
+}
 pub mod first {
     pub struct Solution {}
     impl Solution {
