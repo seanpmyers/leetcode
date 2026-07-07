@@ -1,4 +1,80 @@
-pub mod practice_krustal {
+pub mod heap_dsu {
+    pub struct Solution;
+    use std::cmp::Reverse;
+    use std::collections::BinaryHeap;
+    pub struct Dsu {
+        pub parents: Vec<usize>,
+        pub rank: Vec<usize>,
+    }
+
+    impl Dsu {
+        pub fn new(n: usize) -> Self {
+            Self {
+                parents: (0..=n).collect(),
+                rank: vec![1; n + 1],
+            }
+        }
+
+        pub fn find(&mut self, x: usize) -> usize {
+            let mut p = x;
+            while self.parents[p] != p {
+                self.parents[p] = self.parents[self.parents[p]];
+                p = self.parents[p];
+            }
+            p
+        }
+
+        pub fn union(&mut self, x: usize, y: usize) -> bool {
+            let mut x = self.find(x);
+            let mut y = self.find(y);
+
+            if x == y {
+                return false;
+            }
+
+            if self.rank[x] < self.rank[y] {
+                std::mem::swap(&mut x, &mut y);
+            }
+
+            self.rank[x] += self.rank[y];
+            self.parents[y] = x;
+
+            true
+        }
+    }
+
+    impl Solution {
+        pub fn min_cost_connect_points(points: Vec<Vec<i32>>) -> i32 {
+            let mut n: usize = points.len();
+
+            let mut heap: BinaryHeap<(Reverse<i32>, usize, usize)> = BinaryHeap::new();
+
+            for i in 0..n {
+                let x = &points[i];
+                for j in i + 1..n {
+                    let y = &points[j];
+                    let distance: i32 = (x[0] - y[0]).abs() + (x[1] - y[1]).abs();
+                    heap.push((Reverse(distance), i, j));
+                }
+            }
+            let mut dsu: Dsu = Dsu::new(n);
+            let mut result: i32 = 0;
+
+            while n > 0
+                && let Some((Reverse(dist), x, y)) = heap.pop()
+            {
+                if !dsu.union(x, y) {
+                    continue;
+                }
+                n -= 1;
+                result += dist;
+            }
+
+            result
+        }
+    }
+}
+pub mod practice_kruskal {
     pub struct Solution;
     pub struct Dsu {
         pub parents: Vec<usize>,
@@ -70,7 +146,7 @@ pub mod practice_krustal {
         }
     }
 }
-pub mod krustals {
+pub mod kruskals {
     pub struct Solution;
     use std::cmp::Reverse;
     use std::collections::BinaryHeap;
