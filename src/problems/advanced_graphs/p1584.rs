@@ -1,3 +1,49 @@
+pub mod prims_practice {
+    pub struct Solution;
+    use std::cmp::Reverse;
+    use std::collections::BinaryHeap;
+    impl Solution {
+        pub fn min_cost_connect_points(points: Vec<Vec<i32>>) -> i32 {
+            let mut n: usize = points.len();
+            let mut list: Vec<Vec<(Reverse<i32>, usize)>> = vec![vec![]; n + 1];
+
+            for i in 0..n {
+                let x = &points[i];
+                for j in i + 1..n {
+                    let y = &points[j];
+                    let dist: i32 = (x[0] - y[0]).abs() + (x[1] - y[1]).abs();
+                    list[i].push((Reverse(dist), j));
+                    list[j].push((Reverse(dist), i));
+                }
+            }
+
+            let mut heap: BinaryHeap<(Reverse<i32>, usize)> = BinaryHeap::with_capacity(n);
+            heap.push((Reverse(0), 0));
+
+            let mut result: i32 = 0;
+            let mut visited: Vec<bool> = vec![false; n + 1];
+            while n > 0
+                && let Some((Reverse(dist), current)) = heap.pop()
+            {
+                if visited[current] {
+                    continue;
+                }
+                visited[current] = true;
+                result += dist;
+                n -= 1;
+
+                for point in list[current].iter() {
+                    if visited[point.1] {
+                        continue;
+                    }
+                    heap.push((point.0, point.1));
+                }
+            }
+
+            result
+        }
+    }
+}
 pub mod heap_dsu {
     pub struct Solution;
     use std::cmp::Reverse;
