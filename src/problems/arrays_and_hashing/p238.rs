@@ -1,4 +1,25 @@
 // #arrays #hashing
+pub mod optimal {
+    pub struct Solution;
+    impl Solution {
+        pub fn product_except_self(nums: Vec<i32>) -> Vec<i32> {
+            let mut result: Vec<i32> = vec![1i32; nums.len()];
+            let mut l: i32 = 1;
+            let mut r: i32 = 1;
+            for i in 0..nums.len() {
+                result[i] = l;
+                l *= nums[i];
+            }
+
+            for i in (0..nums.len()).rev() {
+                result[i] *= r;
+                r *= nums[i];
+            }
+
+            result
+        }
+    }
+}
 pub mod clean {
     pub struct Solution;
     impl Solution {
