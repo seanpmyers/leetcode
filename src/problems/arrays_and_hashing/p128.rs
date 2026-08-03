@@ -1,5 +1,31 @@
 // #arrays #hashing
 
+pub mod hashset {
+    use std::collections::HashSet;
+    pub struct Solution;
+    impl Solution {
+        pub fn longest_consecutive(nums: Vec<i32>) -> i32 {
+            if nums.is_empty() {
+                return 0i32;
+            }
+            let set: HashSet<i32> = nums.iter().cloned().collect();
+            let mut result: i32 = 1i32;
+
+            for &num in &set {
+                if set.contains(&(num - 1)) {
+                    continue;
+                }
+                let mut len: i32 = 0;
+                while set.contains(&(num + len)) {
+                    len += 1;
+                }
+                result = result.max(len);
+            }
+
+            result
+        }
+    }
+}
 pub mod hashing {
     pub struct Solution;
     impl Solution {
