@@ -1,3 +1,25 @@
+pub mod third {
+    pub struct Solution;
+    impl Solution {
+        pub fn merge(mut intervals: Vec<Vec<i32>>) -> Vec<Vec<i32>> {
+            let mut result: Vec<Vec<i32>> = Vec::with_capacity(intervals.len());
+            intervals.sort();
+            while let Some(mut next) = intervals.pop() {
+                if result.is_empty() || result.last().is_some_and(|x| x[0] > next[1]) {
+                    result.push(next);
+                    continue;
+                }
+
+                let last = result.pop().unwrap();
+                next[0] = last[0].min(next[0]);
+                next[1] = last[1].max(next[1]);
+                intervals.push(next);
+            }
+
+            result
+        }
+    }
+}
 pub mod second {
     pub struct Solution;
     impl Solution {
