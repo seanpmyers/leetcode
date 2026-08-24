@@ -39,3 +39,11 @@ fn main() {
 
 pub struct Solution;
 impl Solution {}
+
+#[cfg(test)]
+pub mod test {
+    #[test]
+    pub fn midpoint_same_number_test() {
+        assert_eq!(1u8, 1u8.midpoint(1u8))
+    }
+}
