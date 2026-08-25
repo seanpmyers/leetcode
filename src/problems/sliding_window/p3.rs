@@ -1,3 +1,33 @@
+pub mod fixed_array {
+    pub struct Solution;
+    impl Solution {
+        pub fn length_of_longest_substring(s: String) -> i32 {
+            if s.is_empty() {
+                return 0i32;
+            }
+
+            let s: &[u8] = s.as_bytes();
+            let mut result: i32 = 1;
+            let mut set: [Option<usize>; 129usize] = [None; 129usize];
+            let mut l: usize = 0;
+            let mut r: usize = 1;
+
+            set[s[l] as usize] = Some(0);
+            while r < s.len() {
+                let i: usize = s[r] as usize;
+                if let Some(prev) = set[i]
+                    && prev >= l
+                {
+                    result = result.max(s[l..r].len() as i32);
+                    l = prev + 1;
+                }
+                set[i] = Some(r);
+                r += 1;
+            }
+            result.max(s[l..r].len() as i32)
+        }
+    }
+}
 pub mod linear_sliding_window {
     pub struct Solution {}
     impl Solution {
