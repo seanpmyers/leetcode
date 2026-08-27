@@ -1,3 +1,29 @@
+pub mod dynamic_programming {
+    pub struct Solution;
+    impl Solution {
+        pub fn jump(nums: Vec<i32>) -> i32 {
+            if nums.len() < 2 {
+                return 0i32;
+            }
+            let mut dp: Vec<usize> = vec![nums.len(); nums.len()];
+
+            dp[nums.len() - 1] = 0;
+            for i in (0..=nums.len() - 2).rev() {
+                if nums[i] == 0 {
+                    continue;
+                }
+                let x: usize = i.saturating_add(nums[i] as usize).min(nums.len() - 1);
+                let mut y: usize = dp[x] + 1;
+                for j in i + 1..=x {
+                    y = y.min(dp[j].saturating_add(1));
+                }
+                dp[i] = y;
+            }
+
+            dp[0] as i32
+        }
+    }
+}
 /// time complexity: O(n) linear -- worst case checking each number once
 /// space complexity: O(1) constant -- storing only some additional integers
 pub mod greedy {
