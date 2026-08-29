@@ -1,3 +1,40 @@
+pub mod dfs {
+    pub struct Solution;
+    impl Solution {
+        pub fn combination_sum(candidates: Vec<i32>, target: i32) -> Vec<Vec<i32>> {
+            let mut result: Vec<Vec<i32>> = Vec::with_capacity(150usize);
+            let mut current = vec![];
+
+            dfs(0usize, &mut current, target, &candidates, &mut result);
+
+            result
+        }
+    }
+
+    pub fn dfs(
+        i: usize,
+        current: &mut Vec<i32>,
+        t: i32,
+        nums: &Vec<i32>,
+        result: &mut Vec<Vec<i32>>,
+    ) {
+        if t < 0 {
+            return;
+        }
+        if t == 0 {
+            result.push(current.clone());
+            return;
+        }
+        if i >= nums.len() {
+            return;
+        }
+        let x = nums[i];
+        current.push(x);
+        dfs(i, current, t - x, nums, result);
+        current.pop();
+        dfs(i + 1, current, t, nums, result);
+    }
+}
 pub mod optimal_sort_prune {
     pub struct Solution;
     impl Solution {
