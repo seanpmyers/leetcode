@@ -1,3 +1,31 @@
+pub mod character_array {
+    pub struct Solution;
+    impl Solution {
+        pub fn character_replacement(s: String, k: i32) -> i32 {
+            let s: &[u8] = s.as_bytes();
+            let mut result: usize = 1;
+            let mut count: [u32; 26usize] = [0u32; 26usize];
+            let mut l: usize = 0;
+            let mut max: u32 = 0;
+            let k: usize = k as usize;
+
+            for r in 0..s.len() {
+                let i: usize = (s[r] - b'A') as usize;
+                count[i] += 1;
+                max = max.max(count[i]);
+
+                while (r - l + 1) - (max as usize) > k {
+                    let i: usize = (s[l] - b'A') as usize;
+                    count[i] -= 1;
+                    l += 1;
+                }
+                result = result.max(r - l + 1);
+            }
+
+            result as i32
+        }
+    }
+}
 pub mod optimal {
     pub struct Solution {}
     impl Solution {
