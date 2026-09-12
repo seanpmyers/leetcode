@@ -1,3 +1,49 @@
+pub mod dfs {
+
+    // Definition for a binary tree node.
+    #[derive(Debug, PartialEq, Eq)]
+    pub struct TreeNode {
+        pub val: i32,
+        pub left: Option<Rc<RefCell<TreeNode>>>,
+        pub right: Option<Rc<RefCell<TreeNode>>>,
+    }
+
+    impl TreeNode {
+        #[inline]
+        pub fn new(val: i32) -> Self {
+            TreeNode {
+                val,
+                left: None,
+                right: None,
+            }
+        }
+    }
+    use std::cell::RefCell;
+    use std::rc::Rc;
+    pub struct Solution;
+    impl Solution {
+        pub fn build_tree(preorder: Vec<i32>, inorder: Vec<i32>) -> Option<Rc<RefCell<TreeNode>>> {
+            dfs(&preorder, &inorder)
+        }
+    }
+
+    pub fn dfs(preorder: &[i32], inorder: &[i32]) -> Option<Rc<RefCell<TreeNode>>> {
+        if preorder.is_empty() {
+            return None;
+        }
+        let mut result = TreeNode::new(preorder[0]);
+
+        let mut middle: usize = 0;
+        while inorder[middle] != preorder[0] {
+            middle += 1;
+        }
+
+        result.left = dfs(&preorder[1..=middle], &inorder[..middle]);
+        result.right = dfs(&preorder[middle + 1..], &inorder[middle + 1..]);
+
+        Some(Rc::new(RefCell::new(result)))
+    }
+}
 pub mod morris_traversal_iterative {
     // Definition for a binary tree node.
     #[derive(Debug, PartialEq, Eq)]
