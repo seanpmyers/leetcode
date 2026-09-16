@@ -1,3 +1,67 @@
+pub mod another_morris {
+
+    // Definition for a binary tree node.
+    #[derive(Debug, PartialEq, Eq)]
+    pub struct TreeNode {
+        pub val: i32,
+        pub left: Option<Rc<RefCell<TreeNode>>>,
+        pub right: Option<Rc<RefCell<TreeNode>>>,
+    }
+
+    impl TreeNode {
+        #[inline]
+        pub fn new(val: i32) -> Self {
+            TreeNode {
+                val,
+                left: None,
+                right: None,
+            }
+        }
+    }
+    use std::cell::RefCell;
+    use std::rc::Rc;
+    pub struct Solution;
+    impl Solution {
+        pub fn build_tree(preorder: Vec<i32>, inorder: Vec<i32>) -> Option<Rc<RefCell<TreeNode>>> {
+            let n: usize = inorder.len();
+            let mut p: usize = 0;
+            let mut i: usize = 0;
+            let head = Rc::new(RefCell::new(TreeNode::new(0)));
+            let mut current = head.clone();
+
+            while i < n && p < n {
+                let node = Rc::new(RefCell::new(TreeNode::new(preorder[p])));
+                node.borrow_mut().right = current.borrow().right.clone();
+                current.borrow_mut().right = Some(node.clone());
+                current = node;
+
+                p += 1;
+                while p < n && current.borrow().val != inorder[i] {
+                    let left = Rc::new(RefCell::new(TreeNode::new(preorder[p])));
+                    left.borrow_mut().right = Some(current.clone());
+                    current.borrow_mut().left = Some(left.clone());
+                    current = left;
+                    p += 1;
+                }
+
+                i += 1;
+                while i < n
+                    && current
+                        .borrow()
+                        .right
+                        .as_ref()
+                        .is_some_and(|x| x.borrow().val == inorder[i])
+                {
+                    let previous = current.borrow_mut().right.take();
+                    current = previous.unwrap();
+                    i += 1;
+                }
+            }
+
+            head.borrow_mut().right.take()
+        }
+    }
+}
 pub mod dfs {
 
     // Definition for a binary tree node.
