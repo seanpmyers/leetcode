@@ -1,3 +1,55 @@
+pub mod stack_2 {
+
+    // Definition for a binary tree node.
+    #[derive(Debug, PartialEq, Eq)]
+    pub struct TreeNode {
+        pub val: i32,
+        pub left: Option<Rc<RefCell<TreeNode>>>,
+        pub right: Option<Rc<RefCell<TreeNode>>>,
+    }
+
+    impl TreeNode {
+        #[inline]
+        pub fn new(val: i32) -> Self {
+            TreeNode {
+                val,
+                left: None,
+                right: None,
+            }
+        }
+    }
+    use std::cell::RefCell;
+    use std::rc::Rc;
+    pub struct Solution;
+    impl Solution {
+        pub fn good_nodes(root: Option<Rc<RefCell<TreeNode>>>) -> i32 {
+            let Some(root) = root else {
+                return 0i32;
+            };
+            let mut stack = vec![(root, i32::MIN)];
+            let mut result: i32 = 0;
+
+            while let Some((node, prev)) = stack.pop() {
+                let value = node.borrow().val;
+                if value >= prev {
+                    result += 1;
+                }
+                let left = node.borrow_mut().left.take();
+                let right = node.borrow_mut().right.take();
+
+                if let Some(left) = left {
+                    stack.push((left, prev.max(value)));
+                }
+
+                if let Some(right) = right {
+                    stack.push((right, prev.max(value)));
+                }
+            }
+
+            result
+        }
+    }
+}
 pub mod recursive {
     use std::cell::RefCell;
     use std::rc::Rc;
