@@ -1,3 +1,71 @@
+pub mod simple_bfs {
+
+    // Definition for a binary tree node.
+    #[derive(Debug, PartialEq, Eq)]
+    pub struct TreeNode {
+        pub val: i32,
+        pub left: Option<Rc<RefCell<TreeNode>>>,
+        pub right: Option<Rc<RefCell<TreeNode>>>,
+    }
+
+    impl TreeNode {
+        #[inline]
+        pub fn new(val: i32) -> Self {
+            TreeNode {
+                val,
+                left: None,
+                right: None,
+            }
+        }
+    }
+    use std::cell::RefCell;
+    use std::collections::VecDeque;
+    use std::rc::Rc;
+    pub struct Solution;
+    impl Solution {
+        pub fn lowest_common_ancestor(
+            root: Option<Rc<RefCell<TreeNode>>>,
+            p: Option<Rc<RefCell<TreeNode>>>,
+            q: Option<Rc<RefCell<TreeNode>>>,
+        ) -> Option<Rc<RefCell<TreeNode>>> {
+            let Some(p) = p else {
+                return None;
+            };
+            let Some(q) = q else {
+                return None;
+            };
+            let x: i32 = p.borrow().val;
+            let y: i32 = q.borrow().val;
+            let Some(root) = root else {
+                return None;
+            };
+            if root.borrow().val == x || root.borrow().val == y {
+                return Some(root);
+            }
+            let mut list = VecDeque::new();
+            list.push_back(root.clone());
+            while let Some(node) = list.pop_front() {
+                let value: i32 = node.borrow().val;
+                if x < value && y > value {
+                    return Some(node);
+                }
+                if x > value && y < value {
+                    return Some(node);
+                }
+                if x == value || y == value {
+                    return Some(node);
+                }
+                if x < value {
+                    list.push_back(node.borrow_mut().left.take().unwrap());
+                    continue;
+                }
+                list.push_back(node.borrow_mut().right.take().unwrap());
+            }
+
+            None
+        }
+    }
+}
 pub mod bfs {
 
     // Definition for a binary tree node.
