@@ -1,3 +1,33 @@
+pub mod dfs {
+    pub struct Solution;
+    impl Solution {
+        pub fn letter_combinations(digits: String) -> Vec<String> {
+            let mut result: Vec<String> = vec![];
+
+            pub fn dfs(digits: &[u8], result: &mut Vec<String>, current: &mut Vec<u8>, i: usize) {
+                if i == digits.len() {
+                    result.push(String::from_utf8(current.clone()).unwrap());
+                    return;
+                }
+                let mut digit_i: u8 = (digits[i] - b'2') * 3;
+                let over = digits[i] == b'7' || digits[i] == b'9';
+                let end = if over { 4 } else { 3 };
+                if digits[i] >= b'8' {
+                    digit_i += 1;
+                }
+                for x in 0..end {
+                    let letter: u8 = b'a' + digit_i + x;
+                    current.push(letter);
+                    dfs(digits, result, current, i + 1);
+                    current.pop();
+                }
+            }
+
+            dfs(digits.as_bytes(), &mut result, &mut vec![], 0usize);
+            result
+        }
+    }
+}
 pub mod iterative {
     pub struct Solution;
     impl Solution {
